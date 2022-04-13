@@ -2,13 +2,29 @@ const express = require('express')
 const path = require('path')
 const app = express()
 const port = 3000
+const { hasUser, setUser } = require('./server/db');
+const { getIP } = require('./server/helper');
+const bodyParser = require('body-parser');
 
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'client')));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'dist'));
-// })
+app.get('/check', (req, res) => {
+    const ip = getIP(req);
+    res.setHeader("Content-Type", "application/json")
+    res.send(JSON.stringify({ status: "SUCCESS", data: { ip, user: hasUser(ip) } }))
+})
+
+app.post('/register', (req, res) => {
+    const ip = getIP(req);
+    const { userName } = req.body;
+    setUser(ip, userName);
+    res.setHeader("Content-Type", "application/json")
+    res.send(JSON.stringify({ status: "SUCCESS", data: { ip, userName, balance: 1000 } }))
+})
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+
