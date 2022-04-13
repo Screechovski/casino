@@ -1,0 +1,70 @@
+<template>
+    <div class="bets-history" :class="cssClass">
+        <p class="bets-history__label">История ставок:</p>
+        <ul class="bets-history__list">
+            <li
+                v-for="(item, i) in items"
+                :key="i"
+                class="bets-history__item"
+
+            >
+                <span
+                    class="result"
+                    :class="{'text-danger': !item.result, 'text-success': item.result}"
+                >{{item.result ? "W" : "L"}}</span>
+                <span
+                    :class="item.color"
+                    class="color"
+                />
+                <span
+                    class="value"
+                >{{item.value}}</span>
+            </li>
+        </ul>
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        items: {
+            type: Array,
+            default: []
+        },
+        cssClass: {
+            type: String,
+            default: ""
+        }
+    }
+}
+</script>
+
+<style lang="scss">
+.bets-history {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    &__label {
+        color: #ffffff;
+        font-size: 25px;
+    }
+    &__list {
+        display: flex;
+        gap: 5px;
+    }
+    &__item {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        align-items: center;
+        .color {
+            height: 30px;
+            width: 15px;
+            border-radius: 4px;
+        }
+        .value {
+            color: #ffffff;
+        }
+    }
+}
+</style>
