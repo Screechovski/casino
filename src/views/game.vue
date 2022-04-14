@@ -1,165 +1,100 @@
 <template>
-    <div id="app" class="application">
+    <div class="application">
         <div class="application__body">
-            <v-image :color="color"/>
-            <div class="application__panel" v-if="!buttonLoading">
+            <v-image :color="betColor"/>
+            <div class="application__panel">
                 <input
                     type="text"
-                    class="form-control application__input"
+                    class="form-control application__input my-input"
                     @input="inputHandler"
                     :value="betValue"
                 >
                 <button
                     class="btn btn-secondary"
                     :class="{disabled: !canBet}"
-                    @click="() => startButtonClick(colors[0])"
+                    @click="() => setBetColor(COLORS[0])"
                 >x2</button>
                 <button
                     class="btn btn-warning"
                     :class="{disabled: !canBet}"
-                    @click="() => startButtonClick(colors[1])"
+                    @click="() => setBetColor(COLORS[1])"
                 >x3</button>
                 <button
                     class="btn btn-danger"
                     :class="{disabled: !canBet}"
-                    @click="() => startButtonClick(colors[2])"
+                    @click="() => setBetColor(COLORS[2])"
                 >x5</button>
                 <button
                     class="btn btn-success"
                     :class="{disabled: !canBet}"
-                    @click="() => startButtonClick(colors[3])"
+                    @click="() => setBetColor(COLORS[3])"
                 >x50</button>
             </div>
             <div
-                v-else
                 class="spinner-border text-primary"
                 role="status"
             />
-            <p class="application__balance">Баланс: {{balance}}</p>
         </div>
-        <v-wons-history
-            :items="wonsHistory"
+        <v-user-panel
+            cssClass="application__user-panel"
+        />
+        <!-- <v-wons-history
             cssClass="application__wons-history"
-        />
-        <v-bets-history
-            :items="betsHistory"
+        /> -->
+        <!-- <v-bets-history
             cssClass="application__bets-history"
-        />
+        /> -->
     </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import VBetsHistory from '../components/v-bets-history.vue';
 import VImage from "../components/v-image.vue"
+import VUserPanel from '../components/v-user-panel.vue';
 import VWonsHistory from '../components/v-wons-history.vue';
 import { COLORS, result } from '../constants';
-import { getValue, getColor, saveToLocalStorage, getFromLocalStorage } from "../helper";
-
+// import { getValue, getColor, saveToLocalStorage, getFromLocalStorage } from "../helper";
+// const state = {
+//     buttonLoading: false,
+//     color: "bg-light",
+//     wonsHistory: getFromLocalStorage("wonsHistory") ?? [],
+//     betsHistory: getFromLocalStorage("betsHistory") ?? [],
+//     betValue: 0,
+//     betColor: null,
+//     balance: getFromLocalStorage("balance") ?? 1000,
+//     colors: COLORS
+// };
 export default {
-    data:() => ({
-        buttonLoading: false,
-        color: "bg-light",
-        wonsHistory: getFromLocalStorage("wonsHistory") ?? [],
-        betsHistory: getFromLocalStorage("betsHistory") ?? [],
-        betValue: 0,
-        betColor: null,
-        balance: getFromLocalStorage("balance") ?? 1000,
-        colors: COLORS
-    }),
+    data:() => ({}),
     components: {
         VImage,
         VWonsHistory,
-        VBetsHistory
+        VBetsHistory,
+        VUserPanel
     },
     computed: {
-        canBet(){
-            return this.balance >= this.betValue && this.betValue >= 1;
-        }
+        ...mapGetters({
+            canBet: 'user/canBet',
+            betValue: 'user/betValue',
+            betColor: 'user/betColor',
+        })
     },
     methods: {
-        cleanItems(array){
-            if (array.length > 25) {
-                return array.slice(Math.max(array.length - 25, 1))
-            }
-            return array;
-        },
-        async startButtonClick(argumentColor) {
-            if (this.canBet){
-                this.buttonLoading = true;
-                this.betColor = argumentColor;
-
-                const color = await this.serverQuery();
-                if (color === argumentColor) {
-                    const value = result()[color](this.betValue);
-                    const balance = this.balance + value
-                    const betsHistory = this.cleanItems([...this.betsHistory, {
-                        color,
-                        result: true,
-                        value,
-                    }]);
-                    this.betsHistory = betsHistory;
-                    this.balance = balance;
-                    saveToLocalStorage("balance", balance);
-                    saveToLocalStorage("betsHistory", betsHistory);
-                } else {
-                    const balance = this.balance - this.betValue;
-                    const betsHistory = this.cleanItems([...this.betsHistory, {
-                        color,
-                        result: false,
-                        value: this.betValue,
-                    }]);
-                    this.betsHistory = betsHistory;
-                    this.balance = balance;
-                    saveToLocalStorage("balance", balance);
-                    saveToLocalStorage("betsHistory", betsHistory);
-                }
-                const wonsHistory = this.cleanItems([...this.wonsHistory, color]);
-                this.wonsHistory = wonsHistory;
-                saveToLocalStorage("wonsHistory", wonsHistory);
-
-                this.color = color;
-                this.buttonLoading = false;
-            }
-        },
-        serverQuery() {
-            return new Promise(reject => {
-                setTimeout(() => {
-                    reject(getColor(getValue()));
-                }, 500)
-            })
-        },
+        ...mapActions({
+            setBetValue: 'user/setBetValue',
+            setBetColor: 'user/setBetColor'
+        }),
         inputHandler($event){
             const cleanValue = +$event.target.value.trim().replace(/\D/gi, "");
 
-            if (cleanValue > this.balance) {
-                this.betValue = this.balance;
-            } else {
-                this.betValue = cleanValue;
-            }
-            this.$forceUpdate();
+            this.setBetValue(cleanValue > this.balance ? this.balance : cleanValue);
         }
     }
 }
 </script>
 
-<style lang="scss">
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap");
-
-:root {}
-
-#app {
-    font-family: Roboto, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    height: 100vh;
-    background-color: #1e1e1e;
-    position: relative;
-}
+<style lang="scss" scoped>
 .application {
     &__body {
         display: grid;
@@ -172,10 +107,7 @@ export default {
         display: flex;
         gap: 7px;
     }
-    &__input {
-        background-color: #1e1e1e !important;
-        color: #ffffff !important;
-    }
+    &__input {}
     &__balance {
         color: #ffffff;
         font-size: 25px;
@@ -189,6 +121,11 @@ export default {
         position: absolute;
         top: 90px;
         left: 10px;
+    }
+    &__user-panel {
+        position: absolute;
+        top: 10px;
+        right: 10px;
     }
 }
 </style>

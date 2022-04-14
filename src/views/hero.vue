@@ -1,75 +1,61 @@
 <template>
     <div class="hero">
-        <div class="hero__loader" v-show="user === null">
+        <div class="hero__loader" v-show="user === null"> <!-- user === null -->
             <div
                 class="spinner-border text-primary"
                 role="status"
             />
         </div>
-        <form class="hero__form" v-show="user === 'none'" @submit.prevent="sendForm">
-            <input
-                type="text"
-                class="form-control"
-                :value="userName"
-                @input="inputNameHandler"
-            >
-            <button
-                class="btn btn-success"
-                :class="{disabled: !canSend}"
-            >Отправить</button>
+
+        <form class="hero__form" v-show="user === false" @submit.prevent="sendName"> <!-- user === false -->
+            <label for="user-name">Введите ваше имя</label>
+            <div>
+                <input
+                    id="user-name"
+                    type="text"
+                    class="form-control my-input"
+                    :value="name"
+                    @input="inputNameHandler"
+                >
+                <button
+                    class="btn btn-success"
+                >Отправить</button>
+            </div>
         </form>
+
+        <router-link v-show="user === true" to="/game">Начать игру</router-link>
     </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
-    data: () => ({
-        user: null,
-        userName: "",
-        balance: 0,
-    }),
+    data: () => ({}),
     async mounted(){
-        const checkResult = await this.check()
-
-        console.log(1, checkResult.user === null);
-
-        if (checkResult.data.user === null) {
-            this.user = "none";
-        }
+        await this.login();
     },
     computed: {
+        ...mapGetters({
+            name: 'user/name',
+            user: 'user/isUser',
+            balance: 'user/balance'
+        }),
         canSend(){
-            return this.userName.length > 4;
+            return this.name.length > 4;
         }
     },
     methods: {
-        async check(){
-            const data = await fetch("/check");
-            return await data.json();
-        },
-        async register(){
-            const data = await fetch("/register", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    userName: this.userName
-                })
-            });
-            return await data.json();
-        },
+        ...mapActions({
+            check: 'user/check',
+            register: 'user/register',
+            login: 'user/login',
+            setName: 'user/setName',
+            sendName: 'user/sendName'
+        }),
         inputNameHandler($event){
-            this.userName = $event.target.value.trim().replace(/[^а-яa-z ]/gi, "");
+            this.setName($event.target.value.replace(/[^a-zа-я]/gi, ""))
         },
-        async sendForm(){
-            if (this.canSend) {
-                const registerResult = await this.register();
-                this.userName = registerResult.data.userName;
-                this.balance = registerResult.data.balance;
-            }
-        }
     }
 }
 </script>
@@ -77,6 +63,17 @@ export default {
 
 <style lang="scss" scoped>
 .hero {
-
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        label {
+            color: #fff;
+        }
+        div {
+            display: flex;
+            gap: 15px;
+        }
+    }
 }
 </style>

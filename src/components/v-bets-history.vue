@@ -3,7 +3,7 @@
         <p class="bets-history__label">История ставок:</p>
         <ul class="bets-history__list">
             <li
-                v-for="(item, i) in items"
+                v-for="(item, i) in betsHistory"
                 :key="i"
                 class="bets-history__item"
 
@@ -25,16 +25,18 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
     props: {
-        items: {
-            type: Array,
-            default: []
-        },
         cssClass: {
             type: String,
             default: ""
         }
+    },
+    computed: {
+        ...mapGetters({
+            betsHistory: 'user/betsHistory'
+        }),
     }
 }
 </script>

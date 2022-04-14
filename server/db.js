@@ -5,14 +5,18 @@ const getDBUsers = () => {
     return JSON.parse(fileContent);
 }
 
-module.exports = {
-    hasUser: (ip) => {
-        const user = getDBUsers().find(user => user.ip === ip);
-        return user ? user : null;
-    },
-    setUser: (ip, userName) => {
-        const users = getDBUsers();
+const hasUser = (ip) => {
+    const user = getDBUsers().find(user => user.ip === ip);
+    return user ? user : null;
+}
 
-        fs.writeFileSync('database.json', JSON.stringify([...users, { userName, ip, balance: 1000 }]))
-    }
+const setUser = (ip, name) => {
+    const users = getDBUsers();
+
+    fs.writeFileSync('database.json', JSON.stringify([...users, { name, ip, balance: 1000 }]))
+}
+
+module.exports = {
+    hasUser,
+    setUser
 }

@@ -12,16 +12,20 @@ app.use(bodyParser.json());
 
 app.get('/check', (req, res) => {
     const ip = getIP(req);
-    res.setHeader("Content-Type", "application/json")
-    res.send(JSON.stringify({ status: "SUCCESS", data: { ip, user: hasUser(ip) } }))
+    res.setHeader("Content-Type", "application/json");
+    res.send(JSON.stringify({ status: "SUCCESS", data: { ip, user: hasUser(ip) } }));
 })
 
 app.post('/register', (req, res) => {
     const ip = getIP(req);
-    const { userName } = req.body;
-    setUser(ip, userName);
-    res.setHeader("Content-Type", "application/json")
-    res.send(JSON.stringify({ status: "SUCCESS", data: { ip, userName, balance: 1000 } }))
+    const { name } = req.body;
+    res.setHeader("Content-Type", "application/json");
+    if (!name) {
+        res.send(JSON.stringify({ status: "ERROR" }));
+    } else {
+        setUser(ip, name);
+        res.send(JSON.stringify({ status: "SUCCESS", data: { ip, name, balance: 1000 } }));
+    }
 })
 
 app.listen(port, () => {

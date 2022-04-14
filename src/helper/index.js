@@ -52,3 +52,12 @@ export const getFromLocalStorage = (key) => {
         return null;
     }
 };
+
+// getColor(getValue())
+
+// cleanItems(array){
+//     if (array.length > 25) {
+//         return array.slice(Math.max(array.length - 25, 1))
+//     }
+//     return array;
+// }
