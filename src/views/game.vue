@@ -1,8 +1,8 @@
 <template>
     <div class="application">
         <div class="application__body">
-            <v-image :color="betColor"/>
-            <div class="application__panel">
+            <v-image :color="color"/>
+            <div class="application__panel" v-if="!loading">
                 <input
                     type="text"
                     class="form-control application__input my-input"
@@ -12,83 +12,78 @@
                 <button
                     class="btn btn-secondary"
                     :class="{disabled: !canBet}"
-                    @click="() => setBetColor(COLORS[0])"
+                    @click="() => setBetColor(COLORS_DATA[GRAY].name)"
                 >x2</button>
                 <button
                     class="btn btn-warning"
                     :class="{disabled: !canBet}"
-                    @click="() => setBetColor(COLORS[1])"
+                    @click="() => setBetColor(COLORS_DATA[ORANGE].name)"
                 >x3</button>
                 <button
                     class="btn btn-danger"
                     :class="{disabled: !canBet}"
-                    @click="() => setBetColor(COLORS[2])"
+                    @click="() => setBetColor(COLORS_DATA[RED].name)"
                 >x5</button>
                 <button
                     class="btn btn-success"
                     :class="{disabled: !canBet}"
-                    @click="() => setBetColor(COLORS[3])"
+                    @click="() => setBetColor(COLORS_DATA[GREEN].name)"
                 >x50</button>
             </div>
             <div
+                v-else
                 class="spinner-border text-primary"
                 role="status"
+            />
+            <v-wons-history
+                cssClass="application__wons-history"
             />
         </div>
         <v-user-panel
             cssClass="application__user-panel"
         />
-        <!-- <v-wons-history
-            cssClass="application__wons-history"
-        /> -->
-        <!-- <v-bets-history
-            cssClass="application__bets-history"
-        /> -->
     </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import VBetsHistory from '../components/v-bets-history.vue';
 import VImage from "../components/v-image.vue"
 import VUserPanel from '../components/v-user-panel.vue';
 import VWonsHistory from '../components/v-wons-history.vue';
-import { COLORS, result } from '../constants';
-// import { getValue, getColor, saveToLocalStorage, getFromLocalStorage } from "../helper";
-// const state = {
-//     buttonLoading: false,
-//     color: "bg-light",
-//     wonsHistory: getFromLocalStorage("wonsHistory") ?? [],
-//     betsHistory: getFromLocalStorage("betsHistory") ?? [],
-//     betValue: 0,
-//     betColor: null,
-//     balance: getFromLocalStorage("balance") ?? 1000,
-//     colors: COLORS
-// };
+import { COLORS_DATA, GRAY, ORANGE, RED, GREEN } from '../constants';
+
 export default {
-    data:() => ({}),
+    data:() => ({
+        COLORS_DATA,
+        GRAY,
+        ORANGE,
+        RED,
+        GREEN,
+    }),
     components: {
         VImage,
         VWonsHistory,
-        VBetsHistory,
         VUserPanel
     },
     computed: {
         ...mapGetters({
-            canBet: 'user/canBet',
-            betValue: 'user/betValue',
-            betColor: 'user/betColor',
+            canBet: 'canBet',
+            betValue: 'betValue',
+            betColor: 'betColor',
+            loading: 'betLoading',
+            color: 'wonColor',
         })
     },
     methods: {
         ...mapActions({
-            setBetValue: 'user/setBetValue',
-            setBetColor: 'user/setBetColor'
+            setBetValue: 'setBetValue',
+            setBetColor: 'setBetColor',
+            login: 'login',
         }),
         inputHandler($event){
             const cleanValue = +$event.target.value.trim().replace(/\D/gi, "");
 
-            this.setBetValue(cleanValue > this.balance ? this.balance : cleanValue);
+            this.setBetValue(cleanValue);
         }
     }
 }
@@ -103,25 +98,19 @@ export default {
         justify-items: center;
         gap: 15px;
     }
+
     &__panel {
         display: flex;
         gap: 7px;
     }
+
     &__input {}
+
     &__balance {
         color: #ffffff;
         font-size: 25px;
     }
-    &__wons-history {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-    }
-    &__bets-history {
-        position: absolute;
-        top: 90px;
-        left: 10px;
-    }
+
     &__user-panel {
         position: absolute;
         top: 10px;

@@ -19,7 +19,16 @@ export default {
         width: 70px;
         border-radius: 26px;
         &.gray {
-            background-color: gray;
+            background-color: var(--gray);
+        }
+        &.orange {
+            background-color: var(--orange);
+        }
+        &.red {
+            background-color: var(--red);
+        }
+        &.green {
+            background-color: var(--green);
         }
     }
 </style>

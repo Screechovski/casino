@@ -32,14 +32,11 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
     data: () => ({}),
-    async mounted(){
-        await this.login();
-    },
     computed: {
         ...mapGetters({
-            name: 'user/name',
-            user: 'user/isUser',
-            balance: 'user/balance'
+            name: 'name',
+            user: 'isUser',
+            balance: 'balance'
         }),
         canSend(){
             return this.name.length > 4;
@@ -47,11 +44,11 @@ export default {
     },
     methods: {
         ...mapActions({
-            check: 'user/check',
-            register: 'user/register',
-            login: 'user/login',
-            setName: 'user/setName',
-            sendName: 'user/sendName'
+            check: 'check',
+            register: 'register',
+            login: 'login',
+            setName: 'setName',
+            sendName: 'sendName'
         }),
         inputNameHandler($event){
             this.setName($event.target.value.replace(/[^a-zа-я]/gi, ""))

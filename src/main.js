@@ -6,8 +6,10 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "normalize.css"
 import "reset.css"
 
-new Vue({
-  render: (h) => h(App),
-  router,
-  store,
-}).$mount("#app");
+store.dispatch('login').then(() => {
+    new Vue({
+        render: (h) => h(App),
+        router,
+        store,
+    }).$mount("#app");
+})

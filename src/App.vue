@@ -1,13 +1,17 @@
 <template>
     <div id="app">
         <router-view />
+        <v-alerts />
     </div>
 </template>
 
 <script>
+import VAlerts from "./components/v-alerts.vue"
 export default {
     data:() => ({}),
-    components: {},
+    components: {
+        VAlerts
+    },
     computed: {},
     methods: {}
 }
@@ -28,10 +32,16 @@ export default {
     height: 100vh;
     background-color: #1e1e1e;
     position: relative;
+    --gray: #6c757d;
+    --orange: #ffc107;
+    --red: #dc3545;
+    --green: #198754;
 }
+
 
 .my-input {
     background-color: #1e1e1e !important;
     color: #ffffff !important;
 }
+
 </style>

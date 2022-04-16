@@ -1,6 +1,5 @@
 <template>
     <div class="wons-history" :class="cssClass">
-        <p class="wons-history__label">История игр:</p>
         <ul class="wons-history__list">
             <li
                 v-for="(item, i) in items"
@@ -13,16 +12,26 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
     props: {
-        items: {
-            type: Array,
-            default: []
-        },
         cssClass: {
             type: String,
             default: ""
         }
+    },
+    async mounted(){
+        await this.getBets();
+    },
+    computed:{
+        ...mapGetters({
+            items: 'wonsHistory'
+        })
+    },
+    methods: {
+        ...mapActions({
+            getBets: 'getBets'
+        })
     }
 }
 </script>
@@ -36,15 +45,34 @@ export default {
         color: #ffffff;
         font-size: 25px;
     }
+
     &__list {
         display: flex;
         gap: 5px;
         height: 30px;
+        align-items: center;
     }
+
     &__item {
-        height: 30px;
-        width: 15px;
+        width: 10px;
+        height: 0;
         border-radius: 4px;
+        &.red {
+            background-color: var(--red);
+            height: 20px;
+        }
+        &.gray {
+            background-color: var(--gray);
+            height: 30px;
+        }
+        &.green {
+            background-color: var(--green);
+            height: 15px;
+        }
+        &.orange {
+            background-color: var(--orange);
+            height: 25px;
+        }
     }
 }
 </style>

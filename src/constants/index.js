@@ -1,16 +1,52 @@
-export const COLORS = ["bg-secondary", "bg-warning", "bg-danger", "bg-success"]
-export const START_VALUE = 0;
-export const GRAY_STEP = 26;
-export const ORANGE_STEP = 17;
-export const RED_STEP = 10;
-export const GREEN_STEP = 1;
-export const GRAY = [START_VALUE, START_VALUE + GRAY_STEP];
-export const ORANGE = [START_VALUE + GRAY_STEP, START_VALUE + GRAY_STEP + ORANGE_STEP];
-export const RED = [START_VALUE + GRAY_STEP + ORANGE_STEP, START_VALUE + GRAY_STEP + ORANGE_STEP + RED_STEP];
-export const GREEN = [START_VALUE + GRAY_STEP + ORANGE_STEP + RED_STEP, START_VALUE + GRAY_STEP + ORANGE_STEP + RED_STEP + GREEN_STEP];
-export const result = () => ({
-    [COLORS[0]]: (value) => value * 2,
-    [COLORS[1]]: (value) => value * 3,
-    [COLORS[2]]: (value) => value * 5,
-    [COLORS[3]]: (value) => value * 50,
-})
+export const GRAY = "gray";
+export const ORANGE = "orange";
+export const RED = "red";
+export const GREEN = "green";
+export const COLORS_DATA = {
+    [GRAY]: {
+        name: GRAY,
+        class: "secondary"
+    },
+    [ORANGE]: {
+        name: ORANGE,
+        class: "warning"
+    },
+    [RED]: {
+        name: RED,
+        class: "danger"
+    },
+    [GREEN]: {
+        name: GREEN,
+        class: "success"
+    }
+};
+
+/*
+
+
+const COLORS_DATA = () => ({
+    [colorsList[0]]: {
+        name: COLORS[0],
+        index: 0,
+        class: "secondary",
+        multuply: val => val * 2,
+    },
+    [colorsList[1]]: {
+        name: COLORS[1],
+        index: 1,
+        class: "warning",
+        multuply: val => val * 3,
+    },
+    [colorsList[2]]: {
+        name: COLORS[2],
+        index: 2,
+        class: "danger",
+        multuply: val => val * 5,
+    },
+    [colorsList[3]]: {
+        name: COLORS[3],
+        index: 3,
+        class: "success",
+        multuply: val => val * 50,
+    },
+})*/

@@ -1,34 +1,22 @@
+// const fs = require("fs");
 const express = require('express')
 const path = require('path')
 const app = express()
-const port = 3000
-const { hasUser, setUser } = require('./server/db');
-const { getIP } = require('./server/helper');
+const { bet, register, check, bets } = require('./server/routeHandler');
 const bodyParser = require('body-parser');
+const cors = require('cors')
 
 app.use(express.static(path.join(__dirname, 'client')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors());
+// app.get('/', (req, res) => {
+//     res.setHeader("Content-Type", "text/html; charset=utf8");
+//     res.send(index);
+// })
 
-app.get('/check', (req, res) => {
-    const ip = getIP(req);
-    res.setHeader("Content-Type", "application/json");
-    res.send(JSON.stringify({ status: "SUCCESS", data: { ip, user: hasUser(ip) } }));
-})
-
-app.post('/register', (req, res) => {
-    const ip = getIP(req);
-    const { name } = req.body;
-    res.setHeader("Content-Type", "application/json");
-    if (!name) {
-        res.send(JSON.stringify({ status: "ERROR" }));
-    } else {
-        setUser(ip, name);
-        res.send(JSON.stringify({ status: "SUCCESS", data: { ip, name, balance: 1000 } }));
-    }
-})
-
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
-
+app.get('/check', check)
+app.post('/register', register)
+app.post('/bet', bet)
+app.get('/bets', bets)
+app.listen(3000, () => console.log('Example app listening on port 3000'))
