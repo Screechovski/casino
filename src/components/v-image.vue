@@ -3,7 +3,6 @@
         <div class="won-line__track" ref="track">
             <div
                 v-for="(c, i) in fakeColors"
-                :data-n="i"
                 :key="c + i"
                 class="won-line__item"
                 :class="c" />
