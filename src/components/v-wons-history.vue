@@ -48,9 +48,10 @@ export default {
 
     &__list {
         display: flex;
+        align-items: center;
+        flex-direction: row-reverse;
         gap: 5px;
         height: 30px;
-        align-items: center;
     }
 
     &__item {

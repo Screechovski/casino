@@ -140,16 +140,19 @@ export default new Vuex.Store({
             });
             const { data } = await betResult.json();
 
-            context.commit('addAlert', {
-                text: data.win.value,
-                color: data.bet.color,
-                isWin: data.bet.isWin
-            })
-            context.commit('wonColor', data.win.color)
-            context.commit('setBalance', data.user.balance)
-            context.commit('setBetsHistory', data.user.betsHistory)
-            context.commit('setWonsHistory', data.win.wonsHistory)
-            context.commit('betLoading', false);
+
+            context.commit('wonColor', data.win.color);
+            setTimeout(()=>{
+                context.commit('addAlert', {
+                    text: data.win.value,
+                    color: data.bet.color,
+                    isWin: data.bet.isWin
+                })
+                context.commit('setBalance', data.user.balance);
+                context.commit('setBetsHistory', data.user.betsHistory);
+                context.commit('setWonsHistory', data.win.wonsHistory);
+                context.commit('betLoading', false);
+            }, 5000)
         },
         async getBets(context){
             const betsResult = await fetch(url("/bets"));

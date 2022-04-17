@@ -1,7 +1,7 @@
 <template>
     <div class="application">
         <div class="application__body">
-            <v-image :color="color"/>
+            <v-image :color="color" />
             <div class="application__panel" v-if="!loading">
                 <input
                     type="text"
@@ -10,25 +10,15 @@
                     :value="betValue"
                 >
                 <button
-                    class="btn btn-secondary"
-                    :class="{disabled: !canBet}"
-                    @click="() => setBetColor(COLORS_DATA[GRAY].name)"
-                >x2</button>
-                <button
-                    class="btn btn-warning"
-                    :class="{disabled: !canBet}"
-                    @click="() => setBetColor(COLORS_DATA[ORANGE].name)"
-                >x3</button>
-                <button
-                    class="btn btn-danger"
-                    :class="{disabled: !canBet}"
-                    @click="() => setBetColor(COLORS_DATA[RED].name)"
-                >x5</button>
-                <button
-                    class="btn btn-success"
-                    :class="{disabled: !canBet}"
-                    @click="() => setBetColor(COLORS_DATA[GREEN].name)"
-                >x50</button>
+                    v-for="c in colors"
+                    :key="c.name"
+                    class="btn"
+                    :disabled="!canBet"
+                    :class="'btn-' + c.name"
+                    @click="() => setBetColor(c.name)"
+                >
+                x{{c.multiply(1)}}
+                </button>
             </div>
             <div
                 v-else
@@ -50,15 +40,11 @@ import { mapActions, mapGetters } from 'vuex';
 import VImage from "../components/v-image.vue"
 import VUserPanel from '../components/v-user-panel.vue';
 import VWonsHistory from '../components/v-wons-history.vue';
-import { COLORS_DATA, GRAY, ORANGE, RED, GREEN } from '../constants';
+import { COLORS_DATA } from '../helper/game-regulations';
 
 export default {
     data:() => ({
-        COLORS_DATA,
-        GRAY,
-        ORANGE,
-        RED,
-        GREEN,
+        colors: Object.values(COLORS_DATA)
     }),
     components: {
         VImage,
@@ -102,6 +88,22 @@ export default {
     &__panel {
         display: flex;
         gap: 7px;
+        .btn {
+            color: #ffffff;
+            &-gray {
+                background-color: var(--gray);
+            }
+            &-orange {
+                background-color: var(--orange);
+                color: #000000;
+            }
+            &-red {
+                background-color: var(--red);
+            }
+            &-green {
+                background-color: var(--green);
+            }
+        }
     }
 
     &__input {}

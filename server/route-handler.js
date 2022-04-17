@@ -1,6 +1,7 @@
 const { getIP, cleanItems } = require('./helper');
 const { getUser, setUser, updateUser, addBets, getBets } = require('./db');
-const { COLORS, getWon } = require('./game');
+const { COLORS_ARRAY } = require('./game-regulations');
+const getWon = require('./game');
 
 const error = (data) => JSON.stringify({
     status: "ERROR",
@@ -22,9 +23,9 @@ const bet = (req, res) => {
     }
     const { betValue, betColor } = req.body;
     if (betValue > user.balance || betValue <= 0) {
-        return res.send(error({message: "invalid bet value"}));
+        return res.send(error({message: "invalid bet value", betValue, betColor}));
     }
-    if (!COLORS.includes(betColor)) {
+    if (!COLORS_ARRAY.includes(betColor)) {
         return res.send(error({message: "invalid bet color"}));
     }
 
@@ -35,13 +36,11 @@ const bet = (req, res) => {
     })
     addBets(color);
 
-    setTimeout(()=>{
-        res.send(success({
-            user: newUserData,
-            bet: { color: betColor, value: betValue, isWin},
-            win: { color, value, wonsHistory: getBets() }
-        }));
-    }, 1000)
+    res.send(success({
+        user: newUserData,
+        bet: { color: betColor, value: betValue, isWin },
+        win: { color, value, wonsHistory: getBets() }
+    }));
 }
 
 const register = (req, res) => {

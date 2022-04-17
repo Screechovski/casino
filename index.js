@@ -2,7 +2,7 @@
 const express = require('express')
 const path = require('path')
 const app = express()
-const { bet, register, check, bets } = require('./server/routeHandler');
+const { bet, register, check, bets } = require('./server/route-handler');
 const bodyParser = require('body-parser');
 const cors = require('cors')
 

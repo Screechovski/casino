@@ -21,6 +21,11 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap");
 
 #app {
+    --gray: #6c757d;
+    --orange: #ffc107;
+    --red: #dc3545;
+    --green: #198754;
+    --bg: #1e1e1e;
     font-family: Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -30,12 +35,8 @@ export default {
     justify-content: center;
     gap: 15px;
     height: 100vh;
-    background-color: #1e1e1e;
+    background-color: var(--bg);
     position: relative;
-    --gray: #6c757d;
-    --orange: #ffc107;
-    --red: #dc3545;
-    --green: #198754;
 }
 
 
