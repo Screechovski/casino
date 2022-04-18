@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import { getColor, getValue } from '../helper/game-regulations';
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -26,18 +25,12 @@ export default {
         })
     },
     data:()=>({}),
-    props: {
-        color: {
-            type: String,
-            default: "bg-light"
-        }
-    },
     mounted(){
-        // this.$refs.track.addEventListener('transitionend', this.resetSpinner)
+        this.$refs.track.addEventListener('transitionend', this.spinningEnd)
     },
     methods: {
         ...mapActions({
-            resetSpinner: 'spinner/resetSpinner'
+            spinningEnd: 'spinningEnd'
         })
     }
 }

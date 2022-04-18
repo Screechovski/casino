@@ -6,11 +6,9 @@ const cors = require('cors')
 const http = require('http');
 const app = express()
 const { Server } = require("socket.io");
-const { userOnline } = require('./server/socket-helper');
-const { getValue, getColor } = require('./server/game-regulations');
-const { generateColorsLine } = require('./server/helper');
+const { main } = require('./server/socket-helper');
 
-let hasSpinner = false;
+
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
@@ -19,23 +17,7 @@ const io = new Server(server, {
     }
 });
 
-io.on('connection', socket => {
-    console.log('new connection', socket.id);
-
-    socket.on("user_connected", console.log)
-    socket.on("disconnect", (data) => console.log(data, "user_disconnected"))
-
-    if (!hasSpinner) {
-        setInterval(()=> {
-            const color = getColor(getValue());
-            io.emit("ROLLED", JSON.stringify({
-                color,
-                colorsLine: generateColorsLine(color)
-            }));
-        }, 20000)
-        hasSpinner = true;
-    }
-});
+io.on('connection', main(io));
 
 
 app.use(express.static(path.join(__dirname, 'client')));

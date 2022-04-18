@@ -33,7 +33,7 @@ const bet = (req, res) => {
         balance: user.balance + value,
         betsHistory: cleanItems([...user.betsHistory, { color: betColor, value: betValue, isWin }])
     })
-    addBets(color);
+    // addBets(color);
 
     res.send(success({
         user: newUserData,
@@ -51,16 +51,16 @@ const register = (req, res) => {
     }
     try {
         setUser(ip, name);
-    } catch (error) {
-        return res.send(error({message: "failed to create user", error}));
+    } catch (e) {
+        return res.send(error({message: "failed to create user", e}));
     }
-    res.send(success(getUser(ip)));
+    res.send(success({ user: getUser(ip) }));
 }
 
 const check = (req, res) => {
     const ip = getIP(req);
     res.setHeader("Content-Type", "application/json; charset=utf8");
-    res.send(success({user:getUser(ip)}));
+    res.send(success({ user: getUser(ip) }));
 }
 
 const bets = (req, res) => {

@@ -1,41 +1,77 @@
-const userOnline = (io, socket) => async (data) => {
-    const {
-        user_id,
-        dialogs
-    } = JSON.parse(data);
+const { addBets, getBets } = require("./db");
+const { getValue, getColor } = require("./game-regulations");
+const { generateColorsLine } = require("./helper");
 
-    if (validParams(EVENTS.USER_ONLINE, socket, user_id, dialogs)) {
-        try {
-            socket.join(dialogs);
+let has = false;
+let users = {};
+let betsUser = [];
+let canBet = true;
 
-            if (user_id in USERS_DATA) {
-                USERS_DATA[user_id].socketId = [...USERS_DATA[user_id].socketId, socket.id];
-            } else {
-                USERS_DATA[user_id] = {
-                    userId: user_id,
-                    dialogs,
-                    socketId: [socket.id],
-                    socket,
-                };
-            }
+const userOnline = (io, socket) => async (data) => {};
 
-            io
-                .in(dialogs)
-                .emit(
-                    EVENTS.ALL_USER_ONLINE,
-                    JSON.stringify({
-                        users: Object.keys(USERS_DATA)
-                    })
-                );
+const main = io => socket => {
+    socket.on("user_connected", userConnected(io, socket))
+    socket.on("disconnect", userDisconnected(io, socket))
+    socket.on("USER_BETTING", userBetting(io, socket))
 
-            console.log(`${user_id}: Пользователь зашел в сеть. Пользователи в сети: `, Object.keys(USERS_DATA));
-        } catch (error) {
-            socket.emit(EVENTS.USER_ONLINE_ERROR, data, error);
-            console.log(`Error in ${EVENTS.USER_ONLINE}`, error);
-        }
+    if (!has) {
+        setInterval(()=>{
+            closeBets(io)();
+            setTimeout(roll(io), 1000);
+            setTimeout(openBets(io), 7000);
+        }, 22000)
+        has = true;
     }
-};
+}
+
+const userConnected = (io, socket) => (data) => {
+    console.log("userConnected", data);
+    users[socket.id] = {
+        ...data,
+        socketId: socket.id
+    }
+    console.log("user_connected", data.name);
+}
+
+const userDisconnected = (io, socket) => (data) => {
+    delete users[socket.id];
+    console.log("user_disconnected", socket.id);
+}
+
+const roll = (io) => () => {
+    if (Object.values(users).length > 0) {
+        const color = getColor(getValue());
+
+        console.log("ROLLED:", color);
+
+        addBets(color);
+
+        io.emit("ROLLED", JSON.stringify({
+            color,
+            colorsLine: generateColorsLine(color),
+            wonsHistory: getBets()
+        }));
+    }
+}
+
+const openBets = (io) => () => {
+    canBet = true;
+    console.log("BETS_OPENED");
+    io.emit("BETS_OPENED");
+}
+
+const closeBets = (io) => () => {
+    canBet = false;
+    console.log("BETS_CLOSED");
+    io.emit("BETS_CLOSED");
+}
+
+const userBetting = (io, socket) => ({color, value}) => {
+    console.log("USER_BETTING", users[socket.id], color, value);
+    io.emit("USER_BETTING", users[socket.id].id);
+}
 
 module.exports = {
-    userOnline
+    userOnline,
+    main
 }

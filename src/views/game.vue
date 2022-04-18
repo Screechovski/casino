@@ -1,13 +1,17 @@
 <template>
     <div class="application">
         <div class="application__body">
-            <v-image :color="color" />
-            <div class="application__panel" v-if="!loading">
+            <v-image />
+            <div class="application__timer">
+                <v-timer v-if="serverCanBet" />
+                <span v-else>Ожидайте</span>
+            </div>
+            <div class="application__panel">
                 <input
                     type="text"
                     class="form-control application__input my-input"
                     @input="inputHandler"
-                    :value="betValue"
+                    :value="bettingValue"
                 >
                 <button
                     v-for="c in colors"
@@ -20,11 +24,6 @@
                 x{{c.multiply(1)}}
                 </button>
             </div>
-            <div
-                v-else
-                class="spinner-border text-primary"
-                role="status"
-            />
             <v-wons-history
                 cssClass="application__wons-history"
             />
@@ -40,6 +39,7 @@ import { mapActions, mapGetters } from 'vuex';
 import VImage from "../components/v-image.vue"
 import VUserPanel from '../components/v-user-panel.vue';
 import VWonsHistory from '../components/v-wons-history.vue';
+import VTimer from '../components/v-timer.vue';
 import { COLORS_DATA } from '../helper/game-regulations';
 
 export default {
@@ -49,22 +49,20 @@ export default {
     components: {
         VImage,
         VWonsHistory,
-        VUserPanel
+        VUserPanel,
+        VTimer
     },
     computed: {
         ...mapGetters({
-            canBet: 'canBet',
-            betValue: 'betValue',
-            betColor: 'betColor',
-            loading: 'betLoading',
-            color: 'wonColor',
+            bettingValue: 'bet/bettingValue',
+            canBet: 'bet/canBet',
+            serverCanBet: 'bet/serverCanBet'
         })
     },
     methods: {
         ...mapActions({
-            setBetValue: 'setBetValue',
-            setBetColor: 'setBetColor',
-            login: 'login',
+            setBetValue: 'bet/setBetValue',
+            setBetColor: 'sendBet'
         }),
         inputHandler($event){
             const cleanValue = +$event.target.value.trim().replace(/\D/gi, "");
@@ -117,6 +115,12 @@ export default {
         position: absolute;
         top: 10px;
         right: 10px;
+    }
+
+    &__timer {
+        height: 20px;
+        font-size: 20px;
+        color: #ffffff;
     }
 }
 </style>

@@ -8,7 +8,7 @@
         </div>
 
         <form class="hero__form" v-show="user === false" @submit.prevent="sendName"> <!-- user === false -->
-            <label for="user-name">Введите ваше имя</label>
+            <label for="user-name">Как тебя звать солдат?</label>
             <div>
                 <input
                     id="user-name"
@@ -19,7 +19,7 @@
                 >
                 <button
                     class="btn btn-success"
-                >Отправить</button>
+                >Служу России!</button>
             </div>
         </form>
 
@@ -34,9 +34,9 @@ export default {
     data: () => ({}),
     computed: {
         ...mapGetters({
-            name: 'name',
-            user: 'isUser',
-            balance: 'balance'
+            name: 'user/name',
+            user: 'user/isUser',
+            balance: 'user/balance'
         }),
         canSend(){
             return this.name.length > 4;
@@ -47,8 +47,8 @@ export default {
             check: 'check',
             register: 'register',
             login: 'login',
-            setName: 'setName',
-            sendName: 'sendName'
+            setName: 'user/setName',
+            sendName: 'user/sendName'
         }),
         inputNameHandler($event){
             this.setName($event.target.value.replace(/[^a-zа-я]/gi, ""))

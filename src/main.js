@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "normalize.css"
 import "reset.css"
 
-store.dispatch('login').then(() => {
+store.dispatch('auth/login').then(() => {
     new Vue({
         render: (h) => h(App),
         router,

@@ -7,7 +7,7 @@
             class="alerts__item"
             @click="() => remove(alert.key)"
         >
-            <span class="text">{{getText(alert.isWin, Math.abs(+alert.text))}}</span>
+            <span class="text">{{getText(alert.isWin, alert.text)}}</span>
             <span class="color" :class="alert.color" />
         </li>
     </ul>
@@ -19,18 +19,14 @@ import { mapGetters, mapActions } from "vuex";
 export default {
     computed: {
         ...mapGetters({
-            alerts: 'alerts'
+            alerts: 'alerts/alerts'
         }),
-        getClass: () => (flag) => {
-            return flag ? "success" : "error";
-        },
-        getText: () => (flag, value) => {
-            return `Вы ${flag ? 'выиграли' : 'проиграли'} ${value} поставив на `;
-        }
+        getClass: () => (flag) => flag ? "success" : "error",
+        getText: () => (flag, value) => `Вы ${flag ? 'выиграли' : 'проиграли'} ${Math.abs(+value)} поставив на `
     },
     methods: {
         ...mapActions({
-            remove: 'removeAlert'
+            remove: 'alerts/removeAlert'
         })
     }
 }

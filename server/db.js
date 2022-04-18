@@ -13,7 +13,7 @@ const getUser = (ip) => {
 
 const setUser = (ip, name) => {
     const users = getUsers();
-    const user = { name, ip, balance: 1000, betsHistory: [] };
+    const user = { id: users.length, name, ip, balance: 1000, betsHistory: [] };
 
     fs.writeFileSync('database-users.json', JSON.stringify([...users, user]))
 }

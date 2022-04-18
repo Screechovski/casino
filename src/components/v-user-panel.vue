@@ -16,8 +16,8 @@ export default {
     },
     computed:{
         ...mapGetters({
-            name: 'name',
-            balance: 'balance'
+            name: 'user/name',
+            balance: 'bet/balance'
         }),
     }
 
