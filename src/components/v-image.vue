@@ -1,6 +1,9 @@
 <template>
     <div class="won-line">
-        <div class="won-line__track" ref="track">
+        <div
+            class="won-line__track"
+            ref="track"
+            :class="{ transitionClass, transformClass }">
             <div
                 v-for="(c, i) in fakeColors"
                 :key="c + i"
@@ -12,35 +15,30 @@
 
 <script>
 import { getColor, getValue } from '../helper/game-regulations';
-
-const fakeFirstHalf = [];
-const fakeLastHalf = [];
-for (let i = 0; i < 35; i++) {
-   fakeFirstHalf.push(getColor(getValue()))
-}
-for (let i = 0; i < 5; i++) {
-   fakeLastHalf.push(getColor(getValue()))
-}
+import { mapGetters, mapActions } from "vuex";
 
 export default {
     computed: {
-        fakeColors(){
-            return [...fakeFirstHalf, this.color, ...fakeLastHalf]
-        }
+        ...mapGetters({
+            transitionClass: 'spinner/transitionClass',
+            transformClass: 'spinner/transformClass',
+            fakeColors: 'spinner/colorsArray'
+        })
     },
-    data:()=>({
-        animatedStart: false,
-        animated: false,
-        animatedEnd: false,
-    }),
+    data:()=>({}),
     props: {
         color: {
             type: String,
             default: "bg-light"
         }
     },
-    updated(){
-        this.$refs.track.style.transform = "translateX(-2400px)";
+    mounted(){
+        // this.$refs.track.addEventListener('transitionend', this.resetSpinner)
+    },
+    methods: {
+        ...mapActions({
+            resetSpinner: 'spinner/resetSpinner'
+        })
     }
 }
 </script>
@@ -65,8 +63,6 @@ export default {
         &__track {
             display: flex;
             gap: 5px;
-            // transform: translateX(-2400px);
-            transition: transform 5s ease 0s;
         }
         &__item {
             min-height: 128px;
@@ -85,5 +81,12 @@ export default {
                 background-color: var(--green);
             }
         }
+    }
+
+    .transitionClass {
+        transition: transform 5s ease 0s;
+    }
+    .transformClass {
+        transform: translateX(-2400px);
     }
 </style>

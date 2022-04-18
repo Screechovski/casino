@@ -1,12 +1,17 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import router from '../router';
+import { io } from "socket.io-client";
+import spinner from "./modules/spinner"
 const url = uri =>"http://localhost:3000" + uri;
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     namespaced: true,
+    modules: {
+        spinner,
+    },
     state: {
         name: null,
         balance: null,
@@ -83,9 +88,20 @@ export default new Vuex.Store({
         removeAlert(context, value){
             context.commit('removeAlert', value)
         },
+        async connect(context, name) {
+            const socket = io("http://localhost:3000/", { reconnectionDelayMax: 10000 });
+            socket.emit("user_connected, name: ", name);
+
+            socket.on('connect', () => {
+                socket.on("ROLLED", data => {
+                    context.dispatch('spinner/startSpin', JSON.parse(data));
+                })
+            })
+        },
         async sendName(context){
             const { name, balance, betsHistory } = await context.dispatch("register");
 
+            context.dispatch('connect', name);
             context.commit('setIsUser', true);
             context.commit('setName', name);
             context.commit('setBalance', balance);
@@ -99,6 +115,7 @@ export default new Vuex.Store({
                         context.commit('setIsUser', false);
                         router.push({ name: "hero" });
                     } else {
+                        context.dispatch('connect', user.name);
                         context.commit('setIsUser', true);
                         context.commit('setName', user.name);
                         context.commit('setBalance', user.balance);
@@ -139,7 +156,6 @@ export default new Vuex.Store({
                 body: JSON.stringify({ betValue: context.state.betValue, betColor: value })
             });
             const { data } = await betResult.json();
-
 
             context.commit('wonColor', data.win.color);
             setTimeout(()=>{

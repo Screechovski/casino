@@ -1,7 +1,6 @@
 const { getIP, cleanItems } = require('./helper');
 const { getUser, setUser, updateUser, addBets, getBets } = require('./db');
-const { COLORS_ARRAY } = require('./game-regulations');
-const getWon = require('./game');
+const { COLORS_ARRAY, getWon } = require('./game-regulations');
 
 const error = (data) => JSON.stringify({
     status: "ERROR",

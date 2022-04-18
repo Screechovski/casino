@@ -46,6 +46,20 @@ function getValue(){
     return Math.random() * (maxValue);
 }
 
+function getWon(color, bet){
+    let isWin = true;
+    let value = bet;
+    const wonColor = getColor(getValue());
+    if (wonColor !== color) {
+        value *= -1;
+        isWin = false;
+    } else {
+        value = COLORS_DATA[color].multiply(bet) - bet;
+    }
+
+    return { color: wonColor, value, isWin };
+}
+
 module.exports = {
     GRAY: GRAY,
     ORANGE: ORANGE,
@@ -54,5 +68,6 @@ module.exports = {
     COLORS_DATA: COLORS_DATA,
     COLORS_ARRAY: COLORS_ARRAY,
     getColor: getColor,
-    getValue: getValue
+    getValue: getValue,
+    getWon,
 }
