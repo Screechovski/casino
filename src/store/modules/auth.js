@@ -1,6 +1,6 @@
 import router from "../../router";
 
-const url = uri =>"http://localhost:3000" + uri;
+const url = uri => "http://localhost:3000" + uri;
 
 const auth = {
     namespaced: true,
@@ -9,7 +9,7 @@ const auth = {
     getters: {},
     mutations: {},
     actions: {
-        async login(context){
+        async login(context) {
             return context.dispatch("check")
                 .then(({ user }) => {
                     if (user === null) {
@@ -30,13 +30,13 @@ const auth = {
                     return true;
                 })
         },
-        async check(context){
+        async check(context) {
             const checkResult = await fetch(url("/check"));
             const { data } = await checkResult.json();
 
             return data;
         },
-        async register(context){
+        async register(context) {
             const registerResult = await fetch(url("/register"), {
                 method: "POST",
                 headers: {
