@@ -1,95 +1,69 @@
-const { VueLoaderPlugin } = require('vue-loader')
-const htmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const autoprefixer = require('autoprefixer')
 const path = require('path')
+const { VueLoaderPlugin } = require('vue-loader')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: {
-    main: './src/main.js',
-  },
-  output: {
-    filename: '[name].[contenthash:8].js',
-    path: path.resolve(__dirname, 'client'),
-    chunkFilename: '[name].[contenthash:8].js',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-        },
-      },
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-      },
-      {
-        test: /\.s?css$/,
-        use: [
-          'style-loader',
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: () => [autoprefixer()],
+    entry: ['./client/main.js'],
+    module: {
+        rules: [
+            {
+                test: /\.vue$/,
+                use: 'vue-loader'
             },
-          },
-          'sass-loader',
+            {
+                test: /\.sass$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sassOptions: {
+                                indentedSyntax: true
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
+            {
+                test: /\.pug$/,
+                oneOf: [
+                    {
+                        resourceQuery: /^\?vue/,
+                        use: ['pug-plain-loader']
+                    },
+                    {
+                        use: ['raw-loader', 'pug-plain-loader']
+                    }
+                ]
+            }
         ],
-      },
-      {
-        test: /\.(eot|ttf|woff|woff2)(\?\S*)?$/,
-        loader: 'file-loader',
-      },
-      {
-        test: /\.(png|jpe?g|gif|webm|mp4|svg)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[name][contenthash:8].[ext]',
-          outputPath: 'assets/img',
-          esModule: false,
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js', '.vue'],
+        alias: {
+            '@': path.resolve(__dirname),
         },
-      },
+    },
+    plugins: [
+        new VueLoaderPlugin(),
+        new HtmlWebpackPlugin({
+            template: './public/index.html'
+        }),
     ],
-  },
-  plugins: [
-    new VueLoaderPlugin(),
-    new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin({
-      filename: '[name].[contenthash:8].css',
-      chunkFilename: '[name].[contenthash:8].css',
-    }),
-    new htmlWebpackPlugin({
-      template: path.resolve(__dirname, 'public', 'index.html'),
-      favicon: './public/favicon.ico',
-    }),
-  ],
-  resolve: {
-    alias: {
-      vue$: 'vue/dist/vue.runtime.esm.js',
+    output: {
+        filename: 'bundle.[contenthash].js',
+        path: path.resolve(__dirname, '../public'),
     },
-    extensions: ['*', '.js', '.vue', '.json'],
-  },
-  optimization: {
-    moduleIds: 'hashed',
-    runtimeChunk: 'single',
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          priority: -10,
-          chunks: 'all',
+    devtool: 'eval-source-map',
+    devServer: {
+        static: {
+            directory: path.join(__dirname, '../public'),
         },
-      },
+        hot: true,
     },
-  },
-  devServer: {
-    historyApiFallback: true,
-  },
 }

@@ -6,8 +6,8 @@ const getUsers = () => {
     return JSON.parse(fileContent);
 }
 
-const getUser = (ip) => {
-    const user = getUsers().find(user => user.ip === ip);
+const getUser = (callback) => {
+    const user = getUsers().find(callback);
     return user ? user : null;
 }
 
@@ -18,21 +18,21 @@ const setUser = (ip, name) => {
     fs.writeFileSync('database-users.json', JSON.stringify([...users, user]))
 }
 
-const updateUser = (ip, params) => {
+const updateUser = (id, params) => {
     const users = getUsers();
     const newUsers = users.map(u => {
-        if (u.ip === ip){
+        if (u.id === id){
             return {
                 ...u,
                 ...params,
-                ip
+                id
             }
         }
         return u;
     })
 
     fs.writeFileSync('database-users.json', JSON.stringify(newUsers));
-    return newUsers.find(({ip}) => ip === ip);
+    return newUsers.find(({id}) => id === id);
 }
 
 const getBets = () => {

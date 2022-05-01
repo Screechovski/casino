@@ -15,10 +15,11 @@ const alerts = {
         },
     },
     actions: {
-        addAlert(context, alert) {
-            const key = Date.now();
-            context.commit('addAlert', { key, ...alert });
-            setTimeout(() => context.commit('removeAlert', key), 2000)
+        addAlert(context, { message = null, type = null }) {
+            if (message === null || type === null) throw Error("message or type is null");
+            const key = Date.now() + "_" + Math.random();
+            context.commit('addAlert', { key, message, type });
+            setTimeout(() => context.commit('removeAlert', key), 4000);
         },
         removeAlert(context, key){
             context.commit('removeAlert', key)

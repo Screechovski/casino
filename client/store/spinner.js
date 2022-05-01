@@ -23,7 +23,7 @@ const spinner = {
     },
     actions: {
         startSpin(context, data){
-            const { color, colorsLine } = data;
+            const { colorsLine } = data;
 
             context.commit('setColorsArray', colorsLine);
             context.dispatch('resetSpinner');
@@ -33,6 +33,13 @@ const spinner = {
             setTimeout(()=>{
                 context.commit('setTransformClass', true);
             }, 4)
+        },
+        setColors(context, data) {
+            const { colorsLine } = data;
+            const length = colorsLine.length;
+            const lastSevenColors = colorsLine.slice(length - 7, length)
+
+            context.commit('setColorsArray', lastSevenColors);
         },
         resetSpinner(context){
             context.commit('setTransitionClass', false);

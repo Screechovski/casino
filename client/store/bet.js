@@ -34,6 +34,9 @@ const bet = {
         },
         setServerCanBet(context, value = null) {
             context.commit('setBetValue', value);
+        },
+        addBalance(context, value) {
+            context.commit('setBalance', context.state.balance + value);
         }
     }
 }

@@ -12,36 +12,6 @@ const success = (data) => JSON.stringify({
     data: data
 })
 
-const bet = (req, res) => {
-    res.setHeader("Content-Type", "application/json; charset=utf8");
-
-    const ip = getIP(req);
-    const user = getUser(ip);
-    if (user === null) {
-        return res.send(error({message: "is not user"}));
-    }
-    const { betValue, betColor } = req.body;
-    if (betValue > user.balance || betValue <= 0) {
-        return res.send(error({message: "invalid bet value", betValue, betColor}));
-    }
-    if (!COLORS_ARRAY.includes(betColor)) {
-        return res.send(error({message: "invalid bet color"}));
-    }
-
-    const { color, value, isWin } = getWon(betColor, betValue);
-    const newUserData = updateUser(ip, {
-        balance: user.balance + value,
-        betsHistory: cleanItems([...user.betsHistory, { color: betColor, value: betValue, isWin }])
-    })
-    // addBets(color);
-
-    res.send(success({
-        user: newUserData,
-        bet: { color: betColor, value: betValue, isWin },
-        win: { color, value, wonsHistory: getBets() }
-    }));
-}
-
 const register = (req, res) => {
     const ip = getIP(req);
     const { name } = req.body;
@@ -54,13 +24,13 @@ const register = (req, res) => {
     } catch (e) {
         return res.send(error({message: "failed to create user", e}));
     }
-    res.send(success({ user: getUser(ip) }));
+    res.send(success({ user: getUser(u => u.ip === ip)}));
 }
 
 const check = (req, res) => {
     const ip = getIP(req);
     res.setHeader("Content-Type", "application/json; charset=utf8");
-    res.send(success({ user: getUser(ip) }));
+    res.send(success({ user: getUser(u => u.ip === ip)}));
 }
 
 const bets = (req, res) => {
@@ -71,7 +41,6 @@ const bets = (req, res) => {
 
 
 module.exports = {
-    bet,
     register,
     check,
     bets

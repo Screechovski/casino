@@ -1,5 +1,5 @@
 <template>
-    <div class="hero">
+    <section class="hero">
         <div class="hero__loader" v-show="user === null"> <!-- user === null -->
             <div
                 class="spinner-border text-primary"
@@ -18,13 +18,13 @@
                     @input="inputNameHandler"
                 >
                 <button
-                    class="btn btn-success"
+                    class="btn btn-success hero__button"
                 >Служу России!</button>
             </div>
         </form>
 
         <router-link v-show="user === true" to="/game">Начать игру</router-link>
-    </div>
+    </section>
 </template>
 
 <script>
@@ -39,7 +39,7 @@ export default {
             balance: 'user/balance'
         }),
         canSend(){
-            return this.name.length > 4;
+            return this.name.length > 4
         }
     },
     methods: {
@@ -58,19 +58,22 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
-.hero {
-    &__form {
-        display: flex;
-        flex-direction: column;
-        gap: 7px;
-        label {
-            color: #fff;
-        }
-        div {
-            display: flex;
-            gap: 15px;
-        }
-    }
-}
+<style lang="sass" scoped>
+.hero
+    display: flex
+    align-items: center
+    justify-content: center
+    height: 100%
+    &__form
+        display: flex
+        flex-direction: column
+        gap: 7px
+        max-width: 500px
+        label
+            color: #fff
+        div
+            display: flex
+            gap: 15px
+    &__button
+        white-space: nowrap
 </style>

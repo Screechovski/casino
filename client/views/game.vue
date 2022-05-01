@@ -1,5 +1,5 @@
 <template>
-    <div class="application">
+    <section class="application">
         <div class="application__body">
             <v-image />
             <div class="application__timer">
@@ -31,16 +31,18 @@
         <v-user-panel
             cssClass="application__user-panel"
         />
-    </div>
+        <v-users-bets />
+    </section>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex'
 import VImage from "../components/v-image.vue"
-import VUserPanel from '../components/v-user-panel.vue';
-import VWonsHistory from '../components/v-wons-history.vue';
-import VTimer from '../components/v-timer.vue';
-import { COLORS_DATA } from '../helper/game-regulations';
+import VUserPanel from '../components/v-user-panel.vue'
+import VWonsHistory from '../components/v-wons-history.vue'
+import VTimer from '../components/v-timer.vue'
+import VUsersBets from '../components/v-users-bets'
+import { COLORS_DATA } from '../helper/game-regulations'
 
 export default {
     data:() => ({
@@ -50,7 +52,8 @@ export default {
         VImage,
         VWonsHistory,
         VUserPanel,
-        VTimer
+        VTimer,
+        VUsersBets
     },
     computed: {
         ...mapGetters({
@@ -65,62 +68,55 @@ export default {
             setBetColor: 'sendBet'
         }),
         inputHandler($event){
-            const cleanValue = +$event.target.value.trim().replace(/\D/gi, "");
+            const cleanValue = +$event.target.value.trim().replace(/\D/gi, "")
 
-            this.setBetValue(cleanValue);
+            this.setBetValue(cleanValue)
         }
     }
 }
 </script>
 
-<style lang="scss" scoped>
-.application {
-    &__body {
-        display: grid;
-        grid-template-rows: 1fr 40px;
-        align-items: center;
-        justify-items: center;
-        gap: 15px;
-    }
+<style lang="sass">
+.application
+    height: 100vh
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: flex-end
+    gap: 70px
+    box-sizing: border-box
+    padding-bottom: 5px
 
-    &__panel {
-        display: flex;
-        gap: 7px;
-        .btn {
-            color: #ffffff;
-            &-gray {
-                background-color: var(--gray);
-            }
-            &-orange {
-                background-color: var(--orange);
-                color: #000000;
-            }
-            &-red {
-                background-color: var(--red);
-            }
-            &-green {
-                background-color: var(--green);
-            }
-        }
-    }
+    &__input
+        border: 1px solid var(--bg-light)
+        background-color: var(--bg)
+        padding: 0.4em 0.8em
+        border-radius: 0.4em
+        outline: none
+        width: 100px
 
-    &__input {}
+    &__body
+        display: grid
+        grid-template-rows: 1fr 40px
+        align-items: center
+        justify-items: center
+        gap: 15px
 
-    &__balance {
-        color: #ffffff;
-        font-size: 25px;
-    }
+    &__panel
+        display: flex
+        gap: 7px
 
-    &__user-panel {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    }
+    &__balance
+        color: #ffffff
+        font-size: 25px
 
-    &__timer {
-        height: 20px;
-        font-size: 20px;
-        color: #ffffff;
-    }
-}
+    &__user-panel
+        position: absolute
+        top: 10px
+        right: 10px
+
+    &__timer
+        height: 20px
+        font-size: 20px
+        color: #ffffff
 </style>

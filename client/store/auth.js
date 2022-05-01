@@ -1,4 +1,4 @@
-import router from "../../router";
+import router from "../router";
 
 const url = uri =>"http://localhost:3000" + uri;
 
