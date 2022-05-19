@@ -53,17 +53,12 @@ module.exports = {
         new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
             template: './public/index.html'
-        }),
+        })
     ],
     output: {
         filename: 'bundle.[contenthash].js',
         path: path.resolve(__dirname, '../public'),
+        publicPath: '/public'
     },
-    devtool: 'eval-source-map',
-    devServer: {
-        static: {
-            directory: path.join(__dirname, '../public'),
-        },
-        hot: true,
-    },
+    watch: true,
 }

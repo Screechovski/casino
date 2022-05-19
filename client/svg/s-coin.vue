@@ -23,6 +23,6 @@ export default {
     justify-content: center
     border-radius: 50%
     svg
-        height: 15px
-        width: 15px
+        height: calc(100% - 2px)
+        width: calc(100% - 2px)
 </style>

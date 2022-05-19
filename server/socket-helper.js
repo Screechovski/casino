@@ -1,20 +1,19 @@
-const { addBets, getBets, updateUser, getUser } = require("./db");
-const { getValue, getColor, COLORS_DATA } = require("./game-regulations");
-const { generateColorsLine } = require("./helper");
+import { addBets, getBets, updateUser, getUser } from "./db";
+import { getValue, getColor, COLORS_DATA } from "./game-regulations";
+import { generateColorsLine } from "./helper";
 
 let has = false;
 let users = {};
 let betsUser = [];
 let canBet = true;
-let lastGame = [];
 
-const userOnline = (io, socket) => async (data) => {};
+export let lastGame = [];
 
 const requestValidator = (anchor, data = { id: null}) => {
     if (data.id === null) throw Error(anchor + ": id is null");
 }
 
-const main = io => socket => {
+export const main = io => socket => {
     socket.on("USER_CONNECTED", userConnected(io, socket))
     socket.on("disconnect", userDisconnected(io, socket))
     socket.on("USER_BETTING", userBetting(io, socket))
@@ -54,6 +53,8 @@ const roll = (io) => () => {
         console.log("ROLLED:", color);
 
         addBets(color);
+
+        console.log("betsUser", betsUser);
 
         betsUser.forEach(bet => {
             const win = color === bet.color;
@@ -118,10 +119,4 @@ const userBetting = (io, socket) => (jsonData) => {
     }
     updateUser(users[socket.id].id, betMan);
     io.emit("USER_BETTING", JSON.stringify({ ...users[socket.id], color, value }));
-}
-
-module.exports = {
-    userOnline,
-    main,
-    lastGame
 }

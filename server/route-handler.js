@@ -1,6 +1,5 @@
-const { getIP, cleanItems } = require('./helper');
-const { getUser, setUser, updateUser, addBets, getBets } = require('./db');
-const { COLORS_ARRAY, getWon } = require('./game-regulations');
+import { getIP } from './helper';
+import { getUser, setUser, getBets } from './db';
 
 const error = (data) => JSON.stringify({
     status: "ERROR",
@@ -12,7 +11,7 @@ const success = (data) => JSON.stringify({
     data: data
 })
 
-const register = (req, res) => {
+export const register = (req, res) => {
     const ip = getIP(req);
     const { name } = req.body;
     res.setHeader("Content-Type", "application/json; charset=utf8");
@@ -27,21 +26,27 @@ const register = (req, res) => {
     res.send(success({ user: getUser(u => u.ip === ip)}));
 }
 
-const check = (req, res) => {
-    const ip = getIP(req);
-    res.setHeader("Content-Type", "application/json; charset=utf8");
-    res.send(success({ user: getUser(u => u.ip === ip)}));
+const check = (req) => new Promise((resolve, reject) => {
+    try {
+        const ip = getIP(req);
+        const user = getUser(u => u.ip === ip);
+        const id = user ? user.id : null;
+
+        resolve(success({ id: id }));
+    } catch (error) {
+        reject(error({ error }));
+    }
+})
+
+export const checkProxy = async (req, res) => {
+    const checkResult = await check(req);
+
+    res.setHeader("Content-Type", "application/json; charset=utf8")
+    res.send(checkResult);
 }
 
-const bets = (req, res) => {
+export const bets = (req, res) => {
     const bets = getBets();
     res.setHeader("Content-Type", "application/json; charset=utf8");
     res.send(success(bets));
-}
-
-
-module.exports = {
-    register,
-    check,
-    bets
 }

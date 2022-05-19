@@ -1,14 +1,14 @@
-const { getColor, getValue } = require("./game-regulations");
+import { getColor, getValue } from "./game-regulations";
 
-const getIP = (req) => req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-const cleanItems = (array) => {
+let preventColors = [];
+export const getIP = (req) => req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+export const cleanItems = (array) => {
     if (array.length > 25) {
         return array.slice(Math.max(array.length - 25, 1))
     }
     return array;
 }
-let preventColors = [];
-const generateColors = (color) => {
+export const generateColorsLine = (color) => {
     let fakeFirstHalf = [];
     let fakeLastHalf = [];
     let result = [];
@@ -24,11 +24,4 @@ const generateColors = (color) => {
     preventColors = result.slice(result.length - 7, result.length);
 
     return result;
-}
-
-
-module.exports = {
-    getIP,
-    cleanItems,
-    generateColorsLine: generateColors,
 }

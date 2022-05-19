@@ -1,8 +1,8 @@
-const GRAY = "gray";
-const ORANGE = "orange";
-const RED = "red";
-const GREEN = "green";
-const COLORS_DATA = {
+export const GRAY = "gray";
+export const ORANGE = "orange";
+export const RED = "red";
+export const GREEN = "green";
+export const COLORS_DATA = {
     [GRAY]: {
         name: GRAY,
         range: [0, 26],
@@ -28,9 +28,9 @@ const COLORS_DATA = {
         multiply: val => val * 50,
     },
 }
-const COLORS_ARRAY = [GRAY, ORANGE, RED, GREEN];
+export const COLORS_ARRAY = [GRAY, ORANGE, RED, GREEN];
 
-function getColor(value){
+export const getColor = (value) => {
     const arr = Object.values(COLORS_DATA);
     for (let c = 0; c < arr.length; c++) {
         const [min, max] = arr[c].range;
@@ -40,13 +40,13 @@ function getColor(value){
     }
 }
 
-function getValue(){
+export const getValue = () => {
     const arr = Object.values(COLORS_DATA);
     const [,maxValue] = arr[arr.length - 1].range;
     return Math.random() * (maxValue);
 }
 
-function getWon(color, bet){
+export const getWon = (color, bet) => {
     let isWin = true;
     let value = bet;
     const wonColor = getColor(getValue());
@@ -58,16 +58,4 @@ function getWon(color, bet){
     }
 
     return { color: wonColor, value, isWin };
-}
-
-module.exports = {
-    GRAY: GRAY,
-    ORANGE: ORANGE,
-    RED: RED,
-    GREEN: GREEN,
-    COLORS_DATA: COLORS_DATA,
-    COLORS_ARRAY: COLORS_ARRAY,
-    getColor: getColor,
-    getValue: getValue,
-    getWon,
 }

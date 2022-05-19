@@ -10,7 +10,7 @@ const auth = {
     mutations: {},
     actions: {
         async login(context){
-            return context.dispatch("check")
+            /*return context.dispatch("check")
                 .then(({ user }) => {
                     if (user === null) {
                         context.dispatch('user/setIsUser', false, { root: true });
@@ -28,7 +28,13 @@ const auth = {
                         router.push({ name: "game" });
                     }
                     return true;
-                })
+                })*/
+
+                const checkResult = await context.dispatch("check");
+
+                console.log(checkResult);
+
+                return checkResult;
         },
         async check(context){
             const checkResult = await fetch(url("/check"));

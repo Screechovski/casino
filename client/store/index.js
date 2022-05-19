@@ -38,7 +38,10 @@ export default new createStore({
     },
     actions: {
         async connect(context) {
-            socket = io("http://localhost:3000/", { reconnectionDelayMax: 10000 });
+            socket = io("http://localhost:3000", {
+                path: '/socket.io',
+                reconnectionDelayMax: 10000
+            });
 
             socket.on('connect', () => {
                 socket.emit("USER_CONNECTED", JSON.stringify({

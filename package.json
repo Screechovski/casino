@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --mode production",
-    "start": "webpack-dev-server --mode development --config webpack.config.js"
+    "server-build": "webpack --mode production --config ./server/webpack.server.js",
+    "server-dev": "webpack --mode development --config ./server/webpack.server.js",
+    "client-build": "webpack --mode production --config ./client/webpack.client.js",
+    "client-dev": "webpack --mode development --config ./client/webpack.client.js",
+    "start-server": "node ./public/server.js",
+    "build": "",
+    "dev": "npm run server-dev && npm run client-dev"
   },
   "keywords": [],
   "author": "",
@@ -43,7 +48,8 @@
     "html-webpack-plugin": "^4.5.2",
     "sass": "^1.32.13",
     "sass-loader": "^10.2.1",
-    "style-loader": "^1.2.1"
+    "style-loader": "^1.2.1",
+    "webpack-watch-files-plugin": "^1.2.1"
   },
   "browserslist": [
     "Chrome >= 45",
