@@ -1,12 +1,13 @@
 import { getIP } from './helper';
 import { getUser, setUser, getBets } from './db';
+const path = require('path')
 
-const error = (data) => JSON.stringify({
+const error = (data) => ({
     status: "ERROR",
     data: data
 })
 
-const success = (data) => JSON.stringify({
+const success = (data) => ({
     status: "SUCCESS",
     data: data
 })
@@ -14,16 +15,15 @@ const success = (data) => JSON.stringify({
 export const register = (req, res) => {
     const ip = getIP(req);
     const { name } = req.body;
-    res.setHeader("Content-Type", "application/json; charset=utf8");
     if (!name) {
-        return res.send(error({message: "invalid user name: " + name}));
+        return res.json(error({ message: "invalid user name: " + name }));
     }
     try {
         setUser(ip, name);
     } catch (e) {
-        return res.send(error({message: "failed to create user", e}));
+        return res.json(error({ message: "failed to create user", e }));
     }
-    res.send(success({ user: getUser(u => u.ip === ip)}));
+    res.json(success({ user: getUser(u => u.ip === ip) }));
 }
 
 const check = (req) => new Promise((resolve, reject) => {
@@ -41,12 +41,14 @@ const check = (req) => new Promise((resolve, reject) => {
 export const checkProxy = async (req, res) => {
     const checkResult = await check(req);
 
-    res.setHeader("Content-Type", "application/json; charset=utf8")
-    res.send(checkResult);
+    res.json(checkResult);
 }
 
 export const bets = (req, res) => {
     const bets = getBets();
-    res.setHeader("Content-Type", "application/json; charset=utf8");
-    res.send(success(bets));
+    res.json(success(bets));
+}
+
+export const index = (req, res) => {
+    res.sendFile(path.join(__dirname + '/index.html'));
 }
