@@ -1,4 +1,4 @@
-import { bets, checkProxy, index, register } from './route-handler';
+import { bets, checkProxy, index, register, user } from './route-handler';
 import { main } from './socket-helper';
 const express = require('express')
 const path = require('path')
@@ -14,14 +14,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get('/', index)
-
-app.get('/check', checkProxy)
+app.get(['/', '/hero', '/game'], index)
 
 app.get('/check', checkProxy)
 app.post('/register', register)
-app.get('/bets', bets)
-
+app.post('/bets', bets)
+app.post('/user', user)
 
 server.listen(3000, () => console.log('Example app listening on port 3000'))
 

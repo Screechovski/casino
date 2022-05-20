@@ -9,27 +9,29 @@ const auth = {
     getters: {},
     mutations: {},
     actions: {
-        async login(context) {
-            return context.dispatch("check")
-                .then(({ id }) => {
-                    if (id === null) {
-                        context.dispatch('user/setIsUser', false, { root: true });
-                        router.push({ name: "hero" });
-                    } else {
-                        context.dispatch('connect', { name: user.name, id: user.id }, { root: true });
-                        context.dispatch('user/setUserData', {
-                            name: user.name,
-                            isUser: true,
-                            balance: user.balance,
-                            id: user.id,
-                            betsHistory: user.betsHistory
-                        }, { root: true });
+        login: (context) => new Promise(async (resolve, reject) => {
+            const checkResult = await context.dispatch("check");
+            let name = "game";
 
-                        router.push({ name: "game" });
-                    }
-                    return true;
-                })
-        },
+            if (checkResult.id === null) {
+                context.dispatch('user/setIsUser', false, { root: true });
+
+                name = "hero";
+            } else {
+                const userDataResult = await context.dispatch("getUserData", checkResult.id);
+                const { name, id, balance, betsHistory } = userDataResult;
+
+                context.dispatch('connect', { name, id }, { root: true });
+                context.dispatch('user/setUserData', {
+                    name,
+                    balance,
+                    id,
+                    betsHistory,
+                    isUser: true,
+                }, { root: true });
+            }
+            resolve(router.push({ name }));
+        }),
         async check(context) {
             const checkResult = await fetch(url("/check"));
             const { data } = await checkResult.json();
@@ -39,15 +41,23 @@ const auth = {
         async register(context) {
             const registerResult = await fetch(url("/register"), {
                 method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: context.rootGetters["user/name"] })
             });
             const { data } = await registerResult.json();
 
             return data;
         },
+        async getUserData(context, id) {
+            const userResult = await fetch(url(`/user`), {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+            const { data } = await userResult.json();
+
+            return data;
+        }
     }
 }
 

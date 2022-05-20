@@ -45,10 +45,26 @@ export const checkProxy = async (req, res) => {
 }
 
 export const bets = (req, res) => {
-    const bets = getBets();
-    res.json(success(bets));
+    const { id } = req.body;
+    const user = getUser(i => i.id == id);
+
+    if (user) {
+        const bets = getBets();
+        res.json(success(bets));
+    } else {
+        res.json(success({ message: "access denied" }));
+    }
 }
 
 export const index = (req, res) => {
     res.sendFile(path.join(__dirname + '/index.html'));
+}
+
+export const user = (req, res) => {
+    const { id } = req.body;
+    const user = getUser(i => i.id == id);
+
+    delete user.ip;
+
+    res.json(success(user));
 }
