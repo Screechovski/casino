@@ -24,3 +24,5 @@ database-users.json
 *.njsproj
 *.sln
 *.sw?
+
+/public/bundle.*.js

@@ -1,4 +1,4 @@
-import { bets, checkProxy, register } from './route-handler';
+import { bets, check, register } from './route-handler';
 import { main } from './socket-helper';
 const express = require('express')
 const path = require('path')
@@ -9,11 +9,13 @@ const app = express()
 const { Server  } = require("socket.io");
 
 const server = http.createServer(app);
+
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
-app.get('/check', checkProxy)
+
+app.get('/check', check)
 app.post('/register', register)
 app.get('/bets', bets)
 

@@ -52,12 +52,13 @@ module.exports = {
     plugins: [
         new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
-            template: './public/index.html'
+            template: './client/index.html'
         })
     ],
     output: {
         filename: 'bundle.[contenthash].js',
         path: path.resolve(__dirname, '../public'),
         publicPath: '/public'
-    }
+    },
+    watch: true
 }
