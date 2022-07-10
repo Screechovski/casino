@@ -9,7 +9,7 @@ let canBet = true;
 
 export let lastGame = [];
 
-const requestValidator = (anchor, data = { id: null}) => {
+const requestValidator = (anchor, data = { id: null }) => {
     if (data.id === null) throw Error(anchor + ": id is null");
 }
 
@@ -19,7 +19,7 @@ export const main = io => socket => {
     socket.on("USER_BETTING", userBetting(io, socket))
 
     if (!has) {
-        setInterval(()=>{
+        setInterval(() => {
             closeBets(io)();
             setTimeout(roll(io), 1000);
             setTimeout(openBets(io), 7000);
@@ -70,7 +70,7 @@ const roll = (io) => () => {
 
                 updateUser(user.id, user);*/
             }
-            setTimeout(()=> {
+            setTimeout(() => {
                 io.to(bet.socketId).emit(
                     "ROLL_END",
                     JSON.stringify({
@@ -108,7 +108,7 @@ const closeBets = (io) => () => {
 const userBetting = (io, socket) => (jsonData) => {
     const data = JSON.parse(jsonData)
     requestValidator("userBetting", data);
-    const {color, value} = data;
+    const { color, value } = data;
     const betMan = getUser(u => u.id === users[socket.id].id);
     if (value <= betMan.balance) {
         betMan.balance -= value;

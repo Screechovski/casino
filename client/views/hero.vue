@@ -23,7 +23,7 @@
             </div>
         </form>
 
-        <router-link v-show="user === true" to="/game">Начать игру</router-link>
+        <!-- <router-link v-show="user === true" to="/game">Начать игру</router-link> -->
     </section>
 </template>
 

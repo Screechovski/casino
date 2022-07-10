@@ -1,52 +1,75 @@
-import { readFile, readFileSync, writeFileSync } from 'fs';
+import { readFile, readFileSync, writeFile, writeFileSync } from 'fs';
 import { cleanItems } from './helper';
 
-const getUsers = () => {
-    const fileContent = readFileSync('database-users.json', 'utf8');
-    return JSON.parse(fileContent);
-}
-
-export const getUser = (callback) => {
-    const users = getUsers();
-    const user = users.find(callback);
-    return user ? user : null;
-}
-
-export const setUser = (ip, name) => {
-    const users = getUsers();
-    const user = { id: users.length, name, ip, balance: 1000, betsHistory: [] };
-
-    writeFileSync('database-users.json', JSON.stringify([...users, user]))
-}
-
-export const updateUser = (id, params) => {
-    const users = getUsers();
-    const newUsers = users.map(u => {
-        if (u.id === id){
-            return {
-                ...u,
-                ...params,
-                id
-            }
-        }
-        return u;
-    })
-
-    writeFileSync('database-users.json', JSON.stringify(newUsers));
-    return newUsers.find(({id}) => id === id);
-}
-
-export const getBets = () => {
-    const fileContent = readFileSync('database-bets.json', 'utf8');
-    return JSON.parse(fileContent);
-}
-
-export const addBets = (color) => {
-    let bets = getBets();
-
-    if (bets.length > 25) {
-        bets = cleanItems(bets);
+const getUsers = () => new Promise((resolve, reject) => {
+    try {
+        readFile('database-users.json', data => resolve(JSON.parse(data)))
+    } catch (error) {
+        reject("db getUsers", error)
     }
+})
 
-    writeFileSync('database-bets.json', JSON.stringify([...bets, color]));
-}
+export const getUser = (callback) => new Promise((resolve, reject) => {
+    try {
+        const users = getUsers();
+        const user = users.find(callback);
+
+        user ? resolve(user) : resolve(null)
+    } catch (error) {
+        reject("db getUser", error)
+    }
+})
+
+export const setUser = (ip, name) => new Promise((resolve, reject) => {
+    try {
+        const users = getUsers();
+        const user = { id: users.length, name, ip, balance: 1000, betsHistory: [] };
+
+        writeFile('database-users.json', JSON.stringify([...users, user]), resolve)
+    } catch (error) {
+        reject("db setUser", error);
+    }
+})
+
+export const updateUser = (id, params) => new Promise((resolve, reject) => {
+    try {
+        const users = getUsers();
+        const newUsers = users.map(u => {
+            if (u.id === id){
+                return {
+                    ...u,
+                    ...params,
+                    id
+                }
+            }
+            return u;
+        })
+
+        writeFile('database-users.json', JSON.stringify(newUsers), () => {
+            resolve(newUsers.find(({id}) => id === id));
+        });
+    } catch (error) {
+        reject("db updateUser", error);
+    }
+})
+
+export const getBets = () => new Promise((resolve, reject) => {
+    try {
+        readFile('database-bets.json', 'utf8', data => resolve(JSON.parse(data)));
+    } catch (error) {
+        reject("db getBets", error);
+    }
+})
+
+export const addBets = (color) => new Promise((resolve, reject) => {
+    try {
+        let bets = getBets();
+
+        if (bets.length > 25) {
+            bets = cleanItems(bets);
+        }
+        writeFile('database-bets.json', JSON.stringify([...bets, color]), resolve);
+    } catch (error) {
+        reject("db addBets", error);
+    }
+})
