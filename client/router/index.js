@@ -1,10 +1,10 @@
-import {createRouter,createWebHashHistory} from "vue-router";
+import { createRouter, createWebHashHistory, createWebHistory } from "vue-router";
 import hero from "../views/hero.vue";
 import game from "../views/game.vue";
 
 const routes = [
     {
-        path: "/",
+        path: "/hero",
         name: "hero",
         component: hero,
     },
@@ -12,11 +12,11 @@ const routes = [
         path: "/game",
         name: "game",
         component: game,
-    },
+    }
 ]
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),//createWebHashHistory(),
     routes,
 });
 

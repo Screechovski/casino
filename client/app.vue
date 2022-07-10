@@ -6,7 +6,9 @@
 <script>
 import VAlerts from "./components/v-alerts.vue"
 export default {
-    data:() => ({}),
+    data:() => ({
+
+    }),
     components: {
         VAlerts
     },

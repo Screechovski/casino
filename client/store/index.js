@@ -7,7 +7,7 @@ import bet from "./bet"
 import usersBets from "./users-bets"
 import { createStore } from 'vuex'
 import { ruColorsName } from "../helper/common";
-const url = uri =>"http://localhost:3000" + uri;
+const url = uri => "http://localhost:3000" + uri;
 let socket = null;
 
 export default new createStore({
@@ -20,7 +20,7 @@ export default new createStore({
         bet,
         usersBets
     },
-    state: ()=>({
+    state: () => ({
         wonsHistory: [],
         timerKey: 0,
     }),
@@ -37,23 +37,22 @@ export default new createStore({
         }
     },
     actions: {
-        async connect(context) {
+        connect(context, { name, id }) {
             socket = io("http://localhost:3000", {
                 path: '/socket.io',
                 reconnectionDelayMax: 10000
             });
 
             socket.on('connect', () => {
-                socket.emit("USER_CONNECTED", JSON.stringify({
-                    id: context.rootState.user.id,
-                    name: context.rootState.user.name,
-                }));
+                socket.emit("USER_CONNECTED", JSON.stringify({ id, name, }));
+
                 socket.on("LAST_GAME", jsonData => {
                     const { lastGame } = JSON.parse(jsonData);
 
                     lastGame.length > 0 &&
                         context.dispatch("spinner/setColors", { colorsLine: lastGame })
                 })
+
                 socket.on("BETS_OPENED", () => {
                     context.commit('bet/setServerCanBet', true);
                     context.commit('setTimerKey');
@@ -71,7 +70,7 @@ export default new createStore({
                     const data = JSON.parse(jsonData);
                     const { color, name, value: bet } = data;
 
-                    context.dispatch('usersBets/addUserBet', { color, name, bet})
+                    context.dispatch('usersBets/addUserBet', { color, name, bet })
                 })
                 socket.on("ROLL_END", jsonData => {
                     const data = JSON.parse(jsonData);
@@ -90,8 +89,12 @@ export default new createStore({
                 })
             })
         },
-        async getBets(context){
-            const betsResult = await fetch(url("/bets"));
+        async getBets(context) {
+            const betsResult = await fetch(url("/bets"), {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: context.rootGetters["user/id"] })
+            });
             const { data } = await betsResult.json();
 
             context.commit('setWonsHistory', data);
@@ -110,7 +113,7 @@ export default new createStore({
                 context.dispatch('alerts/addAlert', { message, type: "green" });
             }
         },
-        spinningEnd(context){
+        spinningEnd(context) {
             context.dispatch('getBets');
         }
     }

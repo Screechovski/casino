@@ -58,7 +58,6 @@ module.exports = {
     output: {
         filename: 'bundle.[contenthash].js',
         path: path.resolve(__dirname, '../public'),
-        publicPath: '/public'
     },
     watch: true
 }
