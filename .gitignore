@@ -25,7 +25,6 @@ database-users.json
 *.sln
 *.sw?
 
-/public/bundle.*.js
 package-lock.json
 database*.*
 database-bets.json
