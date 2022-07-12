@@ -10,13 +10,14 @@ const { Server } = require("socket.io");
 
 const server = http.createServer(app);
 
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static('public'));
+// app.use(express.static(path.join(__dirname, '../public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
 app.get(['/casino', '/casino/hero', '/casino/game'], index)
-app.get('/casino/bundle', js)
+// app.get('/casino/bundle', js)
 app.get('/casino/check', check)
 app.post('/casino/register', register)
 app.post('/casino/bets', bets)
