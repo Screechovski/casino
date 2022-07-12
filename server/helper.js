@@ -1,7 +1,11 @@
 import { getColor, getValue } from "./game-regulations";
 
 let preventColors = [];
-export const getIP = (req) => req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+export const getIP = (req) => {
+    console.log(req.headers);
+    return req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+};
+
 export const cleanItems = (array) => {
     if (array.length > 25) {
         return array.slice(Math.max(array.length - 25, 1))
@@ -14,10 +18,10 @@ export const generateColorsLine = (color) => {
     let result = [];
 
     for (let i = preventColors.length; i < 35; i++) {
-       fakeFirstHalf.push(getColor(getValue()))
+        fakeFirstHalf.push(getColor(getValue()))
     }
     for (let i = 0; i < 3; i++) {
-       fakeLastHalf.push(getColor(getValue()))
+        fakeLastHalf.push(getColor(getValue()))
     }
 
     result = [...preventColors, ...fakeFirstHalf, color, ...fakeLastHalf];
