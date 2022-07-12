@@ -7,4 +7,4 @@ export const ruColorsName = color => {
     }
 }
 
-export const isProduction = true;
+export const isProduction = false;

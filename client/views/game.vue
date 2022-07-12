@@ -1,6 +1,7 @@
 <template>
     <section class="application">
-        <span class="application__profit">Профит казино: {{casinoProfit}}</span>
+        <v-chat cssClass="application__chat" />
+        <v-profit cssClass="application__profit" />
         <div class="application__body">
             <v-image />
             <div class="application__timer">
@@ -43,6 +44,8 @@ import VUserPanel from '../components/v-user-panel.vue'
 import VWonsHistory from '../components/v-wons-history.vue'
 import VTimer from '../components/v-timer.vue'
 import VUsersBets from '../components/v-users-bets'
+import VProfit from '../components/v-profit'
+import VChat from '../components/v-chat'
 import { COLORS_DATA } from '../helper/game-regulations'
 
 export default {
@@ -54,14 +57,15 @@ export default {
         VWonsHistory,
         VUserPanel,
         VTimer,
-        VUsersBets
+        VUsersBets,
+        VProfit,
+        VChat
     },
     computed: {
         ...mapGetters({
             bettingValue: 'bet/bettingValue',
             canBet: 'bet/canBet',
             serverCanBet: 'bet/serverCanBet',
-            casinoProfit: 'getCasinoProfit'
         })
     },
     methods: {
@@ -89,12 +93,15 @@ export default {
     box-sizing: border-box
     padding-bottom: 5px
     &__profit
-        font-size: 12px
         position: absolute
         left: 5px
         top: 5px
-        color: #fff
-
+        z-index: 2
+    &__chat
+        position: absolute
+        bottom: 5px
+        left: 5px
+        z-index: 2
     &__input
         border: 1px solid var(--bg-light)
         background-color: var(--bg)

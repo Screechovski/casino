@@ -1,7 +1,5 @@
 import { getColor, getValue } from "./game-regulations";
 
-const isProduction = true;
-
 let preventColors = [];
 
 export const getIP = (req) => req.headers['x-forwarded-for'] || req.socket.remoteAddress;
