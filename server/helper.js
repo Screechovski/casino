@@ -1,10 +1,7 @@
 import { getColor, getValue } from "./game-regulations";
 
 let preventColors = [];
-export const getIP = (req) => {
-    console.log(req.headers);
-    return req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-};
+export const getIP = (req) => req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
 export const cleanItems = (array) => {
     if (array.length > 25) {

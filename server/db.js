@@ -12,7 +12,6 @@ const getUsers = () => new Promise((resolve, reject) => {
 export const getUser = (callback) => new Promise(async (resolve, reject) => {
     try {
         const users = await getUsers();
-        console.log(users);
         const user = users.find(callback);
 
         user ? resolve(user) : resolve(null)
@@ -65,7 +64,6 @@ export const getBets = () => new Promise((resolve, reject) => {
 export const addBets = (color) => new Promise(async (resolve, reject) => {
     try {
         let bets = await getBets();
-        console.log("bets", bets);
 
         if (bets.length > 25) {
             bets = cleanItems(bets);

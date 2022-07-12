@@ -30,9 +30,7 @@ export const register = async (req, res) => {
 export const check = async (req, res) => {
     try {
         const ip = getIP(req);
-        console.log("ip", ip);
         const user = await getUser(u => u.ip === ip);
-        console.log("user", user);
         const id = user ? user.id : null;
 
         res.json(success({ id: id }))
@@ -43,8 +41,6 @@ export const check = async (req, res) => {
 
 export const bets = async (req, res) => {
     const bets = await getBets();
-
-    console.log("bets", bets);
 
     res.setHeader("Content-Type", "application/json; charset=utf8");
     res.send(success(bets));

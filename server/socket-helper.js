@@ -61,11 +61,11 @@ const roll = (io) => async () => {
             const win = color === bet.color;
             const multiplyedValue = COLORS_DATA[color].multiply(bet.value);
             if (win) {
-                console.log(users);
+                /*console.log(users);
                 console.log(bet.socketId);
                 const user = getUser(u => u.socketId === bet.socketId);
 
-                console.log(user);
+                console.log(user);*/
 
                 /*user.balance += multiplyedValue;
 
