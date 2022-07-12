@@ -1,4 +1,4 @@
-import { bets, check, index, register, user } from './route-handler';
+import { bets, check, index, register, user, js } from './route-handler';
 import { main } from './socket-helper';
 const express = require('express')
 const path = require('path')
@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get(['/casino', '/casino/hero', '/casino/game'], index)
+app.get('/casino/bundle', js)
 app.get('/casino/check', check)
 app.post('/casino/register', register)
 app.post('/casino/bets', bets)

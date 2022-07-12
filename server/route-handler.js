@@ -63,3 +63,8 @@ export const index = (req, res) => {
     res.setHeader("Content-Type", "text/html; charset=utf8");
     res.sendFile(path.join(__dirname + '/index.html'));
 }
+
+export const js = (req, res) => {
+    res.setHeader("Content-Type", "text/javascript; charset=utf8");
+    res.sendFile(path.join(__dirname + req.path));
+}
