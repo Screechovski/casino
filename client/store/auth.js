@@ -1,6 +1,6 @@
 import router from "../router";
 
-const url = uri => "http://localhost:3000" + uri;
+const url = uri => "http://localhost:3000/casino" + uri;
 
 const auth = {
     namespaced: true,

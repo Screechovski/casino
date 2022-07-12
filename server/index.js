@@ -15,11 +15,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get(['/', '/hero', '/game'], index)
-app.get('/check', check)
-app.post('/register', register)
-app.post('/bets', bets)
-app.post('/user', user)
+app.get(['/casino', '/casino/hero', '/casino/game'], index)
+app.get('/casino/check', check)
+app.post('/casino/register', register)
+app.post('/casino/bets', bets)
+app.post('/casino/user', user)
 
 server.listen(3000, () => console.log('Example app listening on port 3000'))
 
