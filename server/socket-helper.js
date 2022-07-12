@@ -1,11 +1,13 @@
 import { addBets, getBets, updateUser, getUser } from "./db";
 import { getValue, getColor, COLORS_DATA } from "./game-regulations";
 import { generateColorsLine } from "./helper";
+import { Timer } from './helper';
 
 let has = false;
 let users = {};
 let betsUser = [];
 let canBet = true;
+export let timerTime = null;
 
 export let lastGame = [];
 
@@ -14,21 +16,29 @@ const requestValidator = (anchor, data = { id: null }) => {
 }
 
 export const main = io => socket => {
-    socket.on("USER_CONNECTED", userConnected(io, socket))
+    socket.on("USER_CONNECTED", userConnected(io, socket, timerTime))
     socket.on("disconnect", userDisconnected(io, socket))
     socket.on("USER_BETTING", userBetting(io, socket))
 
     if (!has) {
-        setInterval(() => {
-            closeBets(io)();
-            setTimeout(roll(io), 1000);
-            setTimeout(openBets(io), 7000);
-        }, 22000)
-        has = true;
+        has = new Timer(
+            22000,
+            (time) => {
+                console.log(time);
+                if (time <= 16) timerTime = time;
+            },
+            () => {
+                setTimeout(roll(io), 1000);
+                setTimeout(openBets(io), 7000);
+            },
+            closeBets(io)
+        )
+
+        has.start();
     }
 }
 
-const userConnected = (io, socket) => (jsonData) => {
+const userConnected = (io, socket, timerTime) => (jsonData) => {
     const data = JSON.parse(jsonData);
     console.log("USER_CONNECTED", data);
     requestValidator("userConnected", data);
@@ -37,7 +47,18 @@ const userConnected = (io, socket) => (jsonData) => {
         socketId: socket.id,
         lastGame,
     }
+
     io.to(socket.id).emit("LAST_GAME", JSON.stringify({ lastGame }))
+    io.to(socket.id).emit("GAME_TIME", JSON.stringify({ timerTime }))
+
+    if (canBet) {
+        io.to(socket.id).emit("BETS_IS_OPENED");
+    } else {
+        io.to(socket.id).emit("BETS_IS_CLOSED");
+    }
+
+    io.to(socket.id).emit("", JSON.stringify({ lastGame }))
+
     console.log("USER_CONNECTED", data.name);
 }
 

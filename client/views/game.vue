@@ -3,13 +3,13 @@
         <div class="application__body">
             <v-image />
             <div class="application__timer">
-                <v-timer v-if="serverCanBet" />
-                <span v-else>Ожидайте</span>
+                <v-timer v-show="serverCanBet" />
+                <span v-show="!serverCanBet">Ожидайте</span>
             </div>
             <div class="application__panel">
                 <input
                     type="text"
-                    class="form-control application__input my-input"
+                    class="application__input my-input"
                     @input="inputHandler"
                     :value="bettingValue"
                 >

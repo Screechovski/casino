@@ -5,22 +5,23 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
-    data:() => ({
-        timer: 15,
-        timerInterval: null
-    }),
-    computed: {},
+    data:() => ({ }),
+    computed: {
+        ...mapGetters({
+            timer: 'timer/time',
+        }),
+    },
     methods: {
-        incrementTimer(){
-            if (this.timer > 0) {
-                this.timer--;
-            }
-        }
+        ...mapActions({
+            start: 'timer/start'
+        })
     },
     mounted(){
-        setInterval(this.incrementTimer, 1000);
-    },
+        this.start();
+    }
 }
 </script>
 

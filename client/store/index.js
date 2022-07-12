@@ -5,8 +5,9 @@ import alerts from "./alerts"
 import auth from "./auth"
 import bet from "./bet"
 import usersBets from "./users-bets"
+import timer from "./timer"
 import { createStore } from 'vuex'
-import { ruColorsName } from "../helper/common";
+import { isProduction, ruColorsName } from "../helper/common";
 
 const url = uri => "/casino" + uri;
 
@@ -20,7 +21,8 @@ export default new createStore({
         alerts,
         auth,
         bet,
-        usersBets
+        usersBets,
+        timer
     },
     state: () => ({
         wonsHistory: [],
@@ -40,7 +42,7 @@ export default new createStore({
     },
     actions: {
         connect(context, { name, id }) {
-            socket = io("http://dmyavl.ru", {
+            socket = io(isProduction ? "http://dmyavl.ru" : "http://localhost:3000", {
                 path: '/socket.io',
                 reconnectionDelayMax: 10000
             });
@@ -55,9 +57,16 @@ export default new createStore({
                         context.dispatch("spinner/setColors", { colorsLine: lastGame })
                 })
 
+
+                socket.on("BETS_IS_OPENED", () => {
+                    context.commit('bet/setServerCanBet', true);
+                })
+                socket.on("BETS_IS_CLOSED", () => {
+                    context.commit('bet/setServerCanBet', false);
+                })
                 socket.on("BETS_OPENED", () => {
                     context.commit('bet/setServerCanBet', true);
-                    context.commit('setTimerKey');
+                    context.dispatch('timer/setTime');
                 })
                 socket.on("BETS_CLOSED", () => {
                     context.commit('bet/setServerCanBet', false);
@@ -88,6 +97,10 @@ export default new createStore({
                 socket.on("UPDATE_BALANCE", jsonData => {
                     const data = JSON.parse(jsonData);
                     context.dispatch('bet/setBalance', data.balance);
+                })
+                socket.on("GAME_TIME", jsonData => {
+                    const data = JSON.parse(jsonData);
+                    context.dispatch('timer/setTime', data.timerTime);
                 })
             })
         },

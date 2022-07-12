@@ -2,26 +2,11 @@ import { defaultGettersList } from "../helper/store";
 
 const usersBets = {
     namespaced: true,
-    state:()=>({
-        gray: [{
-            name: "Artem",
-            bet: 154
-        },{
-            name: "Andres",
-            bet: 357
-        }],
-        orange: [{
-            name: "Andres",
-            bet: 24627
-        }],
-        red: [{
-            name: "Petya",
-            bet: 1367
-        }],
-        green: [{
-            name: "Ivan",
-            bet: 247
-        }]
+    state: () => ({
+        gray: [],
+        orange: [],
+        red: [],
+        green: []
     }),
     getters: {
         ...defaultGettersList([
@@ -43,7 +28,7 @@ const usersBets = {
     mutations: {
         addUserBet: (state, data) => {
             const { color, name, bet } = data;
-            state[color] = [{name, bet}, ...state[color]];
+            state[color] = [{ name, bet }, ...state[color]];
         },
         cleanAll: state => {
             state.gray = []
