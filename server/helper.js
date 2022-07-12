@@ -1,6 +1,6 @@
 import { getColor, getValue } from "./game-regulations";
 
-const isProduction = false;
+const isProduction = true;
 
 let preventColors = [];
 
