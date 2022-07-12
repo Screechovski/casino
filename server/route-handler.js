@@ -28,19 +28,16 @@ export const register = async (req, res) => {
 }
 
 export const check = async (req, res) => {
-    let checkResult = null;
-
     try {
+        console.log(1);
         const ip = getIP(req);
         const user = await getUser(u => u.ip === ip);
         const id = user ? user.id : null;
 
-        checkResult = success({ id: id })
+        res.json(success({ id: id }))
     } catch (error) {
-        checkResult = error({ error });
+        res.json(error({ error }))
     }
-
-    res.json(checkResult);
 }
 
 export const bets = async (req, res) => {
