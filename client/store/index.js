@@ -40,8 +40,8 @@ export default new createStore({
     },
     actions: {
         connect(context, { name, id }) {
-            socket = io("http://dmyavl.ru/casino", {
-                path: '/socket.io',
+            socket = io("http://dmyavl.ru", {
+                path: '/casino/socket.io',
                 reconnectionDelayMax: 10000
             });
 
