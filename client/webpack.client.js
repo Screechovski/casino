@@ -56,7 +56,7 @@ module.exports = {
         })
     ],
     output: {
-        filename: 'bundle.[contenthash].js',
+        filename: 'client.js',
         path: path.resolve(__dirname, '../public'),
         publicPath: 'http://dmyavl.ru/casino/',
     },

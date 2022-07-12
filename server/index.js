@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get(['/casino', '/casino/hero', '/casino/game'], index)
-// app.get('/casino/bundle', js)
+app.get('/casino/client.js', js)
 app.get('/casino/check', check)
 app.post('/casino/register', register)
 app.post('/casino/bets', bets)
