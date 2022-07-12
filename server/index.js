@@ -19,7 +19,7 @@ app.get(['/', '/hero', '/game'], index)
 app.get('/check', check)
 app.post('/register', register)
 app.post('/bets', bets)
-// app.post('/user', user)
+app.post('/user', user)
 
 server.listen(3000, () => console.log('Example app listening on port 3000'))
 

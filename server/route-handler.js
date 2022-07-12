@@ -49,3 +49,17 @@ export const bets = async (req, res) => {
     res.setHeader("Content-Type", "application/json; charset=utf8");
     res.send(success(bets));
 }
+
+export const user = async (req, res) => {
+    const { id } = req.body;
+    const user = await getUser(i => i.id == id);
+
+    delete user.ip;
+
+    res.json(success(user));
+}
+
+export const index = (req, res) => {
+    res.setHeader("Content-Type", "text/html; charset=utf8");
+    res.sendFile(path.join(__dirname + '/index.html'));
+}
