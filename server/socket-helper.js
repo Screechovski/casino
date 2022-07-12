@@ -57,20 +57,18 @@ const roll = (io) => async () => {
 
         console.log("betsUser", betsUser);
 
-        betsUser.forEach(bet => {
+        betsUser.forEach(async bet => {
             const win = color === bet.color;
             const multiplyedValue = COLORS_DATA[color].multiply(bet.value);
+
             if (win) {
-                /*console.log(users);
-                console.log(bet.socketId);
-                const user = getUser(u => u.socketId === bet.socketId);
+                const user = await getUser(u => u.id === users[bet.socketId].id);
 
-                console.log(user);*/
+                user.balance += multiplyedValue;
 
-                /*user.balance += multiplyedValue;
-
-                updateUser(user.id, user);*/
+                await updateUser(user.id, user);
             }
+
             setTimeout(() => {
                 io.to(bet.socketId).emit(
                     "ROLL_END",
