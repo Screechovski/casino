@@ -10,18 +10,18 @@ const { Server } = require("socket.io");
 
 const server = http.createServer(app);
 
-app.use(express.static('public'));
-// app.use(express.static(path.join(__dirname, '../public')));
+// app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get(['/casino', '/casino/hero', '/casino/game'], index)
-app.get('/casino/client.js', js)
-app.get('/casino/check', check)
-app.post('/casino/register', register)
-app.post('/casino/bets', bets)
-app.post('/casino/user', user)
+app.get(['/', '/hero', '/game'], index)
+app.get('/client.js', js)
+app.get('/check', check)
+app.post('/register', register)
+app.post('/bets', bets)
+app.post('/user', user)
 
 server.listen(3000, () => console.log('Example app listening on port 3000'))
 
