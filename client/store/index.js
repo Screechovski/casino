@@ -7,7 +7,9 @@ import bet from "./bet"
 import usersBets from "./users-bets"
 import { createStore } from 'vuex'
 import { ruColorsName } from "../helper/common";
-const url = uri => "http://localhost:3000" + uri;
+
+const url = uri => "/casino" + uri;
+
 let socket = null;
 
 export default new createStore({

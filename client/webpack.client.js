@@ -58,7 +58,7 @@ module.exports = {
     output: {
         filename: 'client.js',
         path: path.resolve(__dirname, '../public'),
-        publicPath: 'http://dmyavl.ru/casino/',
+        publicPath: '/casino/',
     },
     watch: true
 }

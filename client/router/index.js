@@ -4,12 +4,12 @@ import game from "../views/game.vue";
 
 const routes = [
     {
-        path: "/hero",
+        path: "/casino/hero",
         name: "hero",
         component: hero,
     },
     {
-        path: "/game",
+        path: "/casino/game",
         name: "game",
         component: game,
     }

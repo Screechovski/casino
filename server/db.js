@@ -3,15 +3,16 @@ import { cleanItems } from './helper';
 
 const getUsers = () => new Promise((resolve, reject) => {
     try {
-        readFile('database-users.json', data => resolve(JSON.parse(data)))
+        readFile('database/users.json', 'utf8', (error, data) => resolve(JSON.parse(data)));
     } catch (error) {
         reject("db getUsers", error)
     }
 })
 
-export const getUser = (callback) => new Promise((resolve, reject) => {
+export const getUser = (callback) => new Promise(async (resolve, reject) => {
     try {
-        const users = getUsers();
+        const users = await getUsers();
+        console.log(users);
         const user = users.find(callback);
 
         user ? resolve(user) : resolve(null)
@@ -20,22 +21,22 @@ export const getUser = (callback) => new Promise((resolve, reject) => {
     }
 })
 
-export const setUser = (ip, name) => new Promise((resolve, reject) => {
+export const setUser = (ip, name) => new Promise(async (resolve, reject) => {
     try {
-        const users = getUsers();
+        const users = await getUsers();
         const user = { id: users.length, name, ip, balance: 1000, betsHistory: [] };
 
-        writeFile('database-users.json', JSON.stringify([...users, user]), resolve)
+        writeFile('database/users.json', JSON.stringify([...users, user]), resolve)
     } catch (error) {
         reject("db setUser", error);
     }
 })
 
-export const updateUser = (id, params) => new Promise((resolve, reject) => {
+export const updateUser = (id, params) => new Promise(async (resolve, reject) => {
     try {
-        const users = getUsers();
+        const users = await getUsers();
         const newUsers = users.map(u => {
-            if (u.id === id){
+            if (u.id === id) {
                 return {
                     ...u,
                     ...params,
@@ -45,8 +46,8 @@ export const updateUser = (id, params) => new Promise((resolve, reject) => {
             return u;
         })
 
-        writeFile('database-users.json', JSON.stringify(newUsers), () => {
-            resolve(newUsers.find(({id}) => id === id));
+        writeFile('database/users.json', JSON.stringify(newUsers), () => {
+            resolve(newUsers.find(({ id }) => id === id));
         });
     } catch (error) {
         reject("db updateUser", error);
@@ -55,20 +56,21 @@ export const updateUser = (id, params) => new Promise((resolve, reject) => {
 
 export const getBets = () => new Promise((resolve, reject) => {
     try {
-        readFile('database-bets.json', 'utf8', data => resolve(JSON.parse(data)));
+        readFile('database/bets.json', 'utf8', (error, data) => resolve(JSON.parse(data)));
     } catch (error) {
         reject("db getBets", error);
     }
 })
 
-export const addBets = (color) => new Promise((resolve, reject) => {
+export const addBets = (color) => new Promise(async (resolve, reject) => {
     try {
-        let bets = getBets();
+        let bets = await getBets();
+        console.log("bets", bets);
 
         if (bets.length > 25) {
             bets = cleanItems(bets);
         }
-        writeFile('database-bets.json', JSON.stringify([...bets, color]), resolve);
+        writeFile('database/bets.json', JSON.stringify([...bets, color]), resolve);
     } catch (error) {
         reject("db addBets", error);
     }

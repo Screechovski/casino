@@ -8,7 +8,7 @@
     "server-dev": "webpack --mode development --config ./server/webpack.server.js",
     "client-build": "webpack --mode production --config ./client/webpack.client.js",
     "client-dev": "webpack --mode development --config ./client/webpack.client.js",
-    "start-server": "nodemon ./public/server.js"
+    "start-server": "nodemon ./public/server.js --ignore ./database"
   },
   "keywords": [],
   "author": "",

@@ -46,13 +46,14 @@ const userDisconnected = (io, socket) => (data) => {
     console.log("user_disconnected", socket.id);
 }
 
-const roll = (io) => () => {
+const roll = (io) => async () => {
     if (Object.values(users).length > 0) {
         const color = getColor(getValue());
+        lastGame = generateColorsLine(color);
 
         console.log("ROLLED:", color);
 
-        addBets(color);
+        await addBets(color);
 
         console.log("betsUser", betsUser);
 
@@ -83,12 +84,12 @@ const roll = (io) => () => {
 
         betsUser = [];
 
-        lastGame = generateColorsLine(color);
+        let wonsHistory = await getBets();
 
         io.emit("ROLLED", JSON.stringify({
             color,
             colorsLine: lastGame,
-            wonsHistory: getBets()
+            wonsHistory,
         }));
     }
 }
@@ -105,18 +106,23 @@ const closeBets = (io) => () => {
     io.emit("BETS_CLOSED");
 }
 
-const userBetting = (io, socket) => (jsonData) => {
+const userBetting = (io, socket) => async (jsonData) => {
     const data = JSON.parse(jsonData)
+
     requestValidator("userBetting", data);
+
     const { color, value } = data;
-    const betMan = getUser(u => u.id === users[socket.id].id);
+    const betMan = await getUser(u => u.id === users[socket.id].id);
+
     if (value <= betMan.balance) {
         betMan.balance -= value;
         betsUser.push({ value, color, name: betMan.name, socketId: socket.id });
+
         io.to(socket.id).emit("UPDATE_BALANCE", JSON.stringify({ balance: betMan.balance }));
     } else {
         io.to(socket.id).emit("USER_BETTING_ERROR", JSON.stringify({ message: "no money", type: "red" }));
     }
-    updateUser(users[socket.id].id, betMan);
+
+    await updateUser(users[socket.id].id, betMan);
     io.emit("USER_BETTING", JSON.stringify({ ...users[socket.id], color, value }));
 }

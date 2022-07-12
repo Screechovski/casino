@@ -26,6 +26,3 @@ database-users.json
 *.sw?
 
 package-lock.json
-database*.*
-database-bets.json
-database-users.json
