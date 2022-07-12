@@ -41,7 +41,7 @@ export default new createStore({
     actions: {
         connect(context, { name, id }) {
             socket = io("http://dmyavl.ru", {
-                path: '/casino',
+                path: '/socket.io',
                 reconnectionDelayMax: 10000
             });
 
