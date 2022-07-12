@@ -1,5 +1,6 @@
 <template>
     <section class="application">
+        <span class="application__profit">Профит казино: {{casinoProfit}}</span>
         <div class="application__body">
             <v-image />
             <div class="application__timer">
@@ -59,7 +60,8 @@ export default {
         ...mapGetters({
             bettingValue: 'bet/bettingValue',
             canBet: 'bet/canBet',
-            serverCanBet: 'bet/serverCanBet'
+            serverCanBet: 'bet/serverCanBet',
+            casinoProfit: 'getCasinoProfit'
         })
     },
     methods: {
@@ -86,6 +88,12 @@ export default {
     gap: 70px
     box-sizing: border-box
     padding-bottom: 5px
+    &__profit
+        font-size: 12px
+        position: absolute
+        left: 5px
+        top: 5px
+        color: #fff
 
     &__input
         border: 1px solid var(--bg-light)

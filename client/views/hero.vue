@@ -40,7 +40,7 @@ export default {
         ...mapGetters({
             name: 'user/name',
             user: 'user/isUser',
-            balance: 'user/balance'
+            balance: 'user/balance',
         }),
         canSend(){
             return this.name.length > 4

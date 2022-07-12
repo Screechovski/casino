@@ -26,18 +26,18 @@ export default new createStore({
     },
     state: () => ({
         wonsHistory: [],
-        timerKey: 0,
+        casinoProfit: 0,
     }),
     getters: {
         wonsHistory: s => s.wonsHistory,
-        timerKey: s => s.timerKey
+        getCasinoProfit: s => s.casinoProfit,
     },
     mutations: {
         setWonsHistory(state, wonsHistory) {
             state.wonsHistory = wonsHistory
         },
-        setTimerKey(state) {
-            state.timerKey = Date.now() + "_" + Math.random();
+        setCasinoProfit: (state, value) => {
+            state.casinoProfit = value;
         }
     },
     actions: {
@@ -57,7 +57,9 @@ export default new createStore({
                         context.dispatch("spinner/setColors", { colorsLine: lastGame })
                 })
 
-
+                socket.on("CASINO_PROFIT", data => {
+                    context.commit('setCasinoProfit', JSON.parse(data).casinoProfit);
+                })
                 socket.on("BETS_IS_OPENED", () => {
                     context.commit('bet/setServerCanBet', true);
                 })

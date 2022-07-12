@@ -7,8 +7,9 @@ let has = false;
 let users = {};
 let betsUser = [];
 let canBet = true;
-export let timerTime = null;
 
+let casinoProfit = 0;
+let timerTime = null;
 export let lastGame = [];
 
 const requestValidator = (anchor, data = { id: null }) => {
@@ -16,7 +17,7 @@ const requestValidator = (anchor, data = { id: null }) => {
 }
 
 export const main = io => socket => {
-    socket.on("USER_CONNECTED", userConnected(io, socket, timerTime))
+    socket.on("USER_CONNECTED", userConnected(io, socket))
     socket.on("disconnect", userDisconnected(io, socket))
     socket.on("USER_BETTING", userBetting(io, socket))
 
@@ -38,7 +39,7 @@ export const main = io => socket => {
     }
 }
 
-const userConnected = (io, socket, timerTime) => (jsonData) => {
+const userConnected = (io, socket) => (jsonData) => {
     const data = JSON.parse(jsonData);
     console.log("USER_CONNECTED", data);
     requestValidator("userConnected", data);
@@ -86,6 +87,7 @@ const roll = (io) => async () => {
                 const user = await getUser(u => u.id === users[bet.socketId].id);
 
                 user.balance += multiplyedValue;
+                casinoProfit -= multiplyedValue;
 
                 await updateUser(user.id, user);
             }
@@ -100,6 +102,9 @@ const roll = (io) => async () => {
                 );
             }, 5000)
         })
+
+        setTimeout(() =>
+            io.emit("CASINO_PROFIT", JSON.stringify({ casinoProfit })), 6000)
 
         betsUser = [];
 
@@ -133,8 +138,11 @@ const userBetting = (io, socket) => async (jsonData) => {
     const { color, value } = data;
     const betMan = await getUser(u => u.id === users[socket.id].id);
 
+    console.log("USER_BETTING", { name: betMan.name, color, value });
+
     if (value <= betMan.balance) {
         betMan.balance -= value;
+        casinoProfit += value;
         betsUser.push({ value, color, name: betMan.name, socketId: socket.id });
 
         io.to(socket.id).emit("UPDATE_BALANCE", JSON.stringify({ balance: betMan.balance }));
