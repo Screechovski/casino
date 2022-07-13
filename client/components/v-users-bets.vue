@@ -71,7 +71,7 @@
                     @click="() => setBetColor('green')"
                     :disabled="!canBet"
                 >
-                    <span>x20</span>
+                    <span>x50</span>
                     <span>
                         <s-coin />
                         {{greenBets}}
