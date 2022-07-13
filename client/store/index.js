@@ -6,6 +6,7 @@ import auth from "./auth"
 import bet from "./bet"
 import usersBets from "./users-bets"
 import timer from "./timer"
+import chat from "./chat"
 import { createStore } from 'vuex'
 import { isProduction, ruColorsName } from "../helper/common";
 
@@ -22,7 +23,8 @@ export default new createStore({
         auth,
         bet,
         usersBets,
-        timer
+        timer,
+        chat
     },
     state: () => ({
         wonsHistory: [],
@@ -104,6 +106,10 @@ export default new createStore({
                     const data = JSON.parse(jsonData);
                     context.dispatch('timer/setTime', data.timerTime);
                 })
+                socket.on("NEW_MESSAGE", jsonData => {
+                    const data = JSON.parse(jsonData);
+                    context.dispatch('chat/addMessage', data);
+                })
             })
         },
         async getBets(context) {
@@ -132,6 +138,15 @@ export default new createStore({
         },
         spinningEnd(context) {
             context.dispatch('getBets');
+        },
+        sendSocketMessage: (context, message) => {
+            socket.emit("NEW_MESSAGE", JSON.stringify({
+                timestamp: new Date().getTime(),
+                message,
+                ownerId: context.rootState.user.id,
+                ownerName: context.rootState.user.name,
+                socketId: socket.id
+            }));
         }
     }
 })

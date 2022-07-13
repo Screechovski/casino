@@ -8,3 +8,6 @@ export const ruColorsName = color => {
 }
 
 export const isProduction = false;
+
+
+export const url = uri => "/casino" + uri;

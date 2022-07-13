@@ -73,3 +73,22 @@ export const addBets = (color) => new Promise(async (resolve, reject) => {
         reject("db addBets", error);
     }
 })
+
+
+export const getMessages = () => new Promise((resolve, reject) => {
+    try {
+        readFile('database/messages.json', 'utf8', (error, data) => resolve(JSON.parse(data)));
+    } catch (error) {
+        reject("db getMessages", error);
+    }
+})
+
+export const addMessage = (message) => new Promise(async (resolve, reject) => {
+    try {
+        const messages = await getMessages();
+
+        writeFile('database/messages.json', JSON.stringify([...messages, message]), resolve);
+    } catch (error) {
+        reject("db addMessage", error);
+    }
+})

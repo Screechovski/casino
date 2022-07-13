@@ -2,7 +2,13 @@
     <div
         class="chat"
         :class="{[cssClass]: cssClass}"
-        :style="`left: ${movePosition[0]}px; bottom: ${movePosition[1]}px`"
+        ref="chat"
+        :style="`
+            transform: translate(${movePosition[0]}px, ${movePosition[1]}px);
+            left: ${staticPosition[0]}px;
+            bottom: ${staticPosition[1]}px;
+        `"
+        @dblclick="resetChatPosition"
     >
         <div class="chat__header">
             <button
@@ -20,23 +26,42 @@
                 <s-move />
             </button>
         </div>
-        <ul class="chat__messages" v-if="isOpen">
-            <li class="me">Lorem Ipsum is simply dummy text of the </li>
-            <li class="me">Lorem Ipsum is simply dummy text of the </li>
-            <li class="me">Lorem Ipsum is simply dummy text of the </li>
-            <li>printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled </li>
-            <li>it to make a type specimen book. It has </li>
-            <li>survived not only five centuries, but also the leap</li>
-            <li class="me">asd</li>
+        <ul 
+            class="chat__messages" 
+            v-if="isOpen" 
+            ref="messages-wrapper"
+        >
+            <li 
+                class="chat__message" 
+                v-for="m, i in messages" 
+                :key="i"
+                :class="messageClass(m.ownerId)"
+            >
+                <span class="name">{{m.ownerName}}:</span>
+                <span class="date">{{getDate(m.timestamp)}}</span>
+                <p class="text">{{m.message}}</p>
+            </li>
         </ul>
-        <form class="chat__form" v-if="isOpen">
-            <input type="text" class="my-input chat__input">
-            <button type="button" class="chat__send">Отправить</button>
+        <form class="chat__form" v-if="isOpen" @submit.prevent="send">
+            <input 
+                type="text" 
+                class="my-input chat__input"
+                @input="inputHandler"
+                :value="message"
+            >
+            <button 
+                type="button" 
+                class="chat__send"
+                :disabled="!canSend"
+                :value="message"
+                @click="send"
+            >Отправить</button>
         </form>
     </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import SArrowDown from "../svg/s-arrow-down";
 import SMove from "../svg/s-move";
 
@@ -44,7 +69,8 @@ export default {
     data: () =>({
         isOpen: true,
         movePositionStart: [],
-        movePosition: [5, 5]
+        movePosition: [5, 5],
+        staticPosition: [5, 5]
     }),
     components: {
         SArrowDown,
@@ -56,7 +82,37 @@ export default {
             defualt: ""
         }
     },
+    computed: {
+        ...mapGetters({
+            canSend: 'chat/canSendMessage',
+            messages: 'chat/messages',
+            message: 'chat/message',
+            userId: 'user/id',
+        }),
+        getDate: (state) => (timestamp) => {
+            const date = new Date(timestamp);
+            const m = date.getMinutes();
+            const h = date.getHours();
+            const dd = date.getDate();
+            const mm = date.getMonth() + 1;
+            const yy = date.getFullYear();
+
+            return `${dd}/${mm}/${yy} ${h}:${m}`
+        },
+        messageClass: (state) => (ownerId) => {
+            if (state.userId === ownerId) {
+                return "me";
+            }
+            return "";
+        }
+    },
     methods: {
+        ...mapActions({
+            inputHandler: 'chat/writeMessage',
+            getMessages: 'chat/getMessages',
+            send: 'chat/sendMessage',
+            messagesWatcher: 'chat/messagesWatcher'
+        }),
         toggleOpened(){
             this.isOpen = !this.isOpen
         },
@@ -67,15 +123,48 @@ export default {
             this.movePositionStart = [e.clientX, e.clientY];
         },
         documentMoveHandler(e){
-            const [x,y] = this.movePositionStart;
-            this.movePosition = [(x - e.clientX) * -1, (y - e.clientY) * -1]
+            const [x, y] = this.movePositionStart;
+
+            let newX = (x - e.clientX) * -1;
+            let newY = (y - e.clientY) * -1;
+
+            this.movePosition = [newX, newY]
         },
         documentMouseupHandler(){
+            let { height, top, left, width } = this.$refs.chat.getBoundingClientRect();
+            let x;
+            let y;
+            let right;
+            right = window.innerWidth - width - 5;
+
+            x = left > right ? right : left;
+            top = top >= 5 ? top : 5;
+            y = window.innerHeight - height - top;
+
+            y = y >= 5 ? y : 5;
+            x = x >= 5 ? x : 5;
+
+            this.staticPosition = [x, y]
+            this.movePosition = [0, 0]
+
             window.removeEventListener("mousemove", this.documentMoveHandler)
             window.removeEventListener("mouseup", this.documentMouseupHandler)
             document.body.style.cursor = "default";
+        },
+        resetChatPosition(){
+            this.staticPosition = [5, 5]
+        },
+        scrollDown(){
+            setTimeout(() => this.$refs["messages-wrapper"].scrollTo({
+                top: this.$refs["messages-wrapper"].scrollHeight + 200,
+                behavior: 'smooth'
+            }), 2)
         }
-    }
+    },
+    mounted() {
+        this.getMessages()
+        this.messagesWatcher(this.scrollDown)
+    },
 }
 </script>
 
@@ -130,19 +219,39 @@ export default {
         &::-webkit-scrollbar-thumb
             border-radius: 6px
             background-color: #000
-        li
-            padding: 3px 5px
-            max-width: 80%
-            border-radius: 5px
-            line-height: 1.3em
-            &:not(.me)
-                background-color: #4f4f4f
-                margin-right: auto
-                color: #cbcbcb
-            &.me
-                background-color: #141414
-                color: #dbdbdb
-                margin-left: auto
+    &__message
+        padding: 3px 5px
+        max-width: 80%
+        border-radius: 5px
+        line-height: 1.3em
+        display: grid
+        .name
+            font-size: 13px
+            grid-area: name
+            color: #727272
+        .date
+            font-size: 13px
+            grid-area: date
+            text-align: right
+            color: #727272
+        .text
+            grid-area: message
+        &:not(.me)
+            background-color: #4f4f4f
+            margin-right: auto
+            color: #cbcbcb
+            grid-template-columns: 1fr 1fr
+            grid-template-rows: auto 1fr
+            grid-template-areas: "name date" "message message"
+        &.me
+            background-color: #141414
+            color: #dbdbdb
+            margin-left: auto
+            grid-template-columns: 1fr
+            grid-template-rows: 1fr auto 
+            grid-template-areas: "message" "date"
+            .name
+                display: none
     &__input
         border: 1px solid var(--bg-light)
         padding: 0.4em 0.8em
@@ -160,11 +269,13 @@ export default {
         border: none
         color: #dbdbdb
         cursor: pointer
+        &:disabled
+            cursor: not-allowed
+            &:active
+                background-color: #363636
         &:active
             background-color: #242424
     &__form
         display: flex
         gap: 5px
-
-
 </style>

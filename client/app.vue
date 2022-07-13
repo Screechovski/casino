@@ -29,6 +29,7 @@ export default {
     height: 100vh
     background-color: var(--bg)
     position: relative
+    overflow: hidden
 
 .btn
     color: #ffffff

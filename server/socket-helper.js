@@ -1,4 +1,4 @@
-import { addBets, getBets, updateUser, getUser } from "./db";
+import { addBets, getBets, updateUser, getUser, addMessage } from "./db";
 import { getValue, getColor, COLORS_DATA } from "./game-regulations";
 import { generateColorsLine } from "./helper";
 import { Timer } from './helper';
@@ -20,6 +20,7 @@ export const main = io => socket => {
     socket.on("USER_CONNECTED", userConnected(io, socket))
     socket.on("disconnect", userDisconnected(io, socket))
     socket.on("USER_BETTING", userBetting(io, socket))
+    socket.on("NEW_MESSAGE", userMessage(io, socket))
 
     if (!has) {
         has = new Timer(
@@ -58,7 +59,7 @@ const userConnected = (io, socket) => (jsonData) => {
         io.to(socket.id).emit("BETS_IS_CLOSED");
     }
 
-    io.to(socket.id).emit("", JSON.stringify({ lastGame }))
+    io.to(socket.id).emit("LAST_GAME", JSON.stringify({ lastGame }))
 
     console.log("USER_CONNECTED", data.name);
 }
@@ -66,6 +67,16 @@ const userConnected = (io, socket) => (jsonData) => {
 const userDisconnected = (io, socket) => (data) => {
     delete users[socket.id];
     console.log("user_disconnected", socket.id);
+}
+
+const userMessage = (io, socket) => async (jsonData) => {
+    const data = JSON.parse(jsonData);
+
+    console.log("NEW_MESSAGE", { name: data.ownerName, message: data.message });
+
+    io.emit("NEW_MESSAGE", jsonData);
+
+    await addMessage(data);
 }
 
 const roll = (io) => async () => {
@@ -79,7 +90,7 @@ const roll = (io) => async () => {
 
         console.log("betsUser", betsUser);
 
-        betsUser.forEach(async bet => {
+        for (const bet of betsUser) {
             const win = color === bet.color;
             const multiplyedValue = COLORS_DATA[color].multiply(bet.value);
 
@@ -101,7 +112,7 @@ const roll = (io) => async () => {
                     })
                 );
             }, 5000)
-        })
+        }
 
         setTimeout(() =>
             io.emit("CASINO_PROFIT", JSON.stringify({ casinoProfit })), 6000)

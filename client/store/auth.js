@@ -1,6 +1,5 @@
 import router from "../router";
-
-const url = uri => "/casino" + uri;
+import { url } from './../helper/common';
 
 const auth = {
     namespaced: true,

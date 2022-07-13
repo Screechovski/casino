@@ -1,4 +1,4 @@
-import { bets, check, index, register, user, js } from './route-handler';
+import { bets, check, index, register, user, js, messages } from './route-handler';
 import { main } from './socket-helper';
 const express = require('express')
 const path = require('path')
@@ -22,6 +22,8 @@ app.get('/casino/check', check)
 app.post('/casino/register', register)
 app.post('/casino/bets', bets)
 app.post('/casino/user', user)
+app.get('/casino/messages', messages)
+
 
 server.listen(3000, () => console.log('Example app listening on port 3000'))
 

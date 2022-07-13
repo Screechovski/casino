@@ -1,5 +1,5 @@
 import { getIP } from './helper';
-import { getUser, setUser, getBets } from './db';
+import { getUser, setUser, getBets, getMessages } from './db';
 const path = require('path')
 
 const error = (data) => ({
@@ -53,6 +53,12 @@ export const user = async (req, res) => {
     delete user.ip;
 
     res.json(success(user));
+}
+
+export const messages = async (req, res) => {
+    const messages = await getMessages(i => i.id == id);
+
+    res.json(success(messages));
 }
 
 export const index = (req, res) => {
