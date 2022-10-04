@@ -1,36 +1,35 @@
 <template>
-    <div class="user-panel" :class="cssClass">
-        <p class="user-panel__line">
-            <span>Имя:</span>
-            <span>{{ name }}</span>
-        </p>
-        <p class="user-panel__line">
-            <span>Баланс:</span>
-            <s-coin />
-            <span>{{ balance }}</span>
-        </p>
-    </div>
+  <div class="user-panel" :class="cssClass">
+    <p class="user-panel__line">
+      <span>Имя:</span>
+      <span>{{ name }}</span>
+    </p>
+    <p class="user-panel__line">
+      <span>Баланс:</span>
+      <s-coin />
+      <span>{{ balance }}</span>
+    </p>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import SCoin from "../svg/s-coin"
+import SCoin from '../svg/s-coin'
 
 export default {
-    props: {
-        cssClass: {
-            type: String,
-            default: ""
-        }
+  props: {
+    cssClass: {
+      type: String,
+      default: '',
     },
-    components: { SCoin },
-    computed:{
-        ...mapGetters({
-            name: 'user/name',
-            balance: 'bet/balance'
-        }),
-    }
-
+  },
+  components: { SCoin },
+  computed: {
+    ...mapGetters({
+      name: 'user/name',
+      balance: 'bet/balance',
+    }),
+  },
 }
 </script>
 

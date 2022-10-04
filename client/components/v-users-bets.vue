@@ -1,116 +1,108 @@
 <template>
-    <div class="users-bets">
-        <ul class="users-bets__colors-columns colors-columns">
-            <li class="colors-columns__item">
-                <button
-                    type="button"
-                    class="colors-columns__header btn btn-gray"
-                    @click="() => setBetColor('gray')"
-                    :disabled="!canBet"
-                >
-                    <span>x2</span>
-                    <span>
-                        <s-coin />
-                        {{grayBets}}
-                    </span>
-                </button>
-                <ul class="bets-column">
-                    <li
-                        v-for="item, i in gray"
-                        :key="i"
-                        class="bets-column__item"
-                    >{{item.name}} {{item.bet}}</li>
-                </ul>
-            </li>
-            <li class="colors-columns__item">
-                <button
-                    type="button"
-                    class="colors-columns__header orange btn btn-orange"
-                    @click="() => setBetColor('orange')"
-                    :disabled="!canBet"
-                >
-                    <span>x3</span>
-                    <span>
-                        <s-coin />
-                        {{orangeBets}}
-                    </span>
-                </button>
-                <ul class="bets-column">
-                    <li
-                        v-for="item, i in orange"
-                        :key="i"
-                        class="bets-column__item"
-                    >{{item.name}} {{item.bet}}</li>
-                </ul>
-            </li>
-            <li class="colors-columns__item">
-                <button
-                    type="button"
-                    class="colors-columns__header red btn btn-red"
-                    @click="() => setBetColor('red')"
-                    :disabled="!canBet"
-                >
-                    <span>x5</span>
-                    <span>
-                        <s-coin />
-                        {{redBets}}
-                    </span>
-                </button>
-                <ul class="bets-column">
-                    <li
-                        v-for="item, i in red"
-                        :key="i"
-                        class="bets-column__item"
-                    >{{item.name}} {{item.bet}}</li>
-                </ul>
-            </li>
-            <li class="colors-columns__item">
-                <button
-                    type="button"
-                    class="colors-columns__header green btn btn-green"
-                    @click="() => setBetColor('green')"
-                    :disabled="!canBet"
-                >
-                    <span>x50</span>
-                    <span>
-                        <s-coin />
-                        {{greenBets}}
-                    </span>
-                </button>
-                <ul class="bets-column">
-                    <li
-                        v-for="item, i in green"
-                        :key="i"
-                        class="bets-column__item"
-                    >{{item.name}} {{item.bet}}</li>
-                </ul>
-            </li>
+  <div class="users-bets">
+    <ul class="users-bets__colors-columns colors-columns">
+      <li class="colors-columns__item">
+        <button
+          type="button"
+          class="colors-columns__header btn btn-gray"
+          @click="() => setBetColor('gray')"
+          :disabled="!canBet"
+        >
+          <span>x2</span>
+          <span>
+            <s-coin />
+            {{ grayBets }}
+          </span>
+        </button>
+        <ul class="bets-column">
+          <li v-for="(item, i) in gray" :key="i" class="bets-column__item">
+            {{ item.name }} {{ item.bet }}
+          </li>
         </ul>
-    </div>
+      </li>
+      <li class="colors-columns__item">
+        <button
+          type="button"
+          class="colors-columns__header orange btn btn-orange"
+          @click="() => setBetColor('orange')"
+          :disabled="!canBet"
+        >
+          <span>x3</span>
+          <span>
+            <s-coin />
+            {{ orangeBets }}
+          </span>
+        </button>
+        <ul class="bets-column">
+          <li v-for="(item, i) in orange" :key="i" class="bets-column__item">
+            {{ item.name }} {{ item.bet }}
+          </li>
+        </ul>
+      </li>
+      <li class="colors-columns__item">
+        <button
+          type="button"
+          class="colors-columns__header red btn btn-red"
+          @click="() => setBetColor('red')"
+          :disabled="!canBet"
+        >
+          <span>x5</span>
+          <span>
+            <s-coin />
+            {{ redBets }}
+          </span>
+        </button>
+        <ul class="bets-column">
+          <li v-for="(item, i) in red" :key="i" class="bets-column__item">
+            {{ item.name }} {{ item.bet }}
+          </li>
+        </ul>
+      </li>
+      <li class="colors-columns__item">
+        <button
+          type="button"
+          class="colors-columns__header green btn btn-green"
+          @click="() => setBetColor('green')"
+          :disabled="!canBet"
+        >
+          <span>x50</span>
+          <span>
+            <s-coin />
+            {{ greenBets }}
+          </span>
+        </button>
+        <ul class="bets-column">
+          <li v-for="(item, i) in green" :key="i" class="bets-column__item">
+            {{ item.name }} {{ item.bet }}
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex';
-import SCoin from "../svg/s-coin.vue"
+import { mapActions, mapGetters } from 'vuex'
+import SCoin from '../svg/s-coin.vue'
 
 export default {
-    components: { SCoin },
-    computed: {
-        ...mapGetters({
-            gray: 'usersBets/getGray',
-            orange: 'usersBets/getOrange',
-            red: 'usersBets/getRed',
-            green: 'usersBets/getGreen',
-            grayBets: 'usersBets/getGrayBetsSum',
-            orangeBets: 'usersBets/getOrangeBetsSum',
-            redBets: 'usersBets/getRedBetsSum',
-            greenBets: 'usersBets/getGreenBetsSum',
-            canBet: 'bet/canBet',
-        })
-    },
-    methods: mapActions({
-        setBetColor: 'sendBet'
+  components: { SCoin },
+  computed: {
+    ...mapGetters({
+      gray: 'usersBets/getGray',
+      orange: 'usersBets/getOrange',
+      red: 'usersBets/getRed',
+      green: 'usersBets/getGreen',
+      grayBets: 'usersBets/getGrayBetsSum',
+      orangeBets: 'usersBets/getOrangeBetsSum',
+      redBets: 'usersBets/getRedBetsSum',
+      greenBets: 'usersBets/getGreenBetsSum',
+      canBet: 'bet/canBet',
     }),
+  },
+  methods: mapActions({
+    setBetColor: 'sendBet',
+  }),
 }
 </script>
 
@@ -169,5 +161,4 @@ export default {
         border-radius: 10px
         background-color: var(--bg-light)
         color: #ffffff
-
 </style>

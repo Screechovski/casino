@@ -1,19 +1,17 @@
 <template>
-    <router-view />
-    <v-alerts />
+  <router-view />
+  <v-alerts />
 </template>
 
 <script>
-import VAlerts from "./components/v-alerts.vue"
+import VAlerts from './components/v-alerts.vue'
 export default {
-    data:() => ({
-
-    }),
-    components: {
-        VAlerts
-    },
-    computed: {},
-    methods: {}
+  data: () => ({}),
+  components: {
+    VAlerts,
+  },
+  computed: {},
+  methods: {},
 }
 </script>
 

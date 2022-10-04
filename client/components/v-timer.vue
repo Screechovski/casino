@@ -1,29 +1,28 @@
 <template>
-    <span>
-        {{timer}}
-    </span>
+  <span>
+    {{ timer }}
+  </span>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-    data:() => ({ }),
-    computed: {
-        ...mapGetters({
-            timer: 'timer/time',
-        }),
-    },
-    methods: {
-        ...mapActions({
-            start: 'timer/start'
-        })
-    },
-    mounted(){
-        this.start();
-    }
+  data: () => ({}),
+  computed: {
+    ...mapGetters({
+      timer: 'timer/time',
+    }),
+  },
+  methods: {
+    ...mapActions({
+      start: 'timer/start',
+    }),
+  },
+  mounted() {
+    this.start()
+  },
 }
 </script>
 
-<style>
-</style>
+<style></style>

@@ -1,38 +1,38 @@
 <template>
-    <div class="wons-history" :class="cssClass">
-        <ul class="wons-history__list">
-            <li
-                v-for="(item, i) in items"
-                :key="i"
-                class="wons-history__item"
-                :class="item"
-            ></li>
-        </ul>
-    </div>
+  <div class="wons-history" :class="cssClass">
+    <ul class="wons-history__list">
+      <li
+        v-for="(item, i) in items"
+        :key="i"
+        class="wons-history__item"
+        :class="item"
+      ></li>
+    </ul>
+  </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex"
+import { mapGetters, mapActions } from 'vuex'
 export default {
-    props: {
-        cssClass: {
-            type: String,
-            default: ""
-        }
+  props: {
+    cssClass: {
+      type: String,
+      default: '',
     },
-    async mounted(){
-        await this.getBets()
-    },
-    computed:{
-        ...mapGetters({
-            items: 'wonsHistory'
-        })
-    },
-    methods: {
-        ...mapActions({
-            getBets: 'getBets'
-        })
-    }
+  },
+  async mounted() {
+    await this.getBets()
+  },
+  computed: {
+    ...mapGetters({
+      items: 'wonsHistory',
+    }),
+  },
+  methods: {
+    ...mapActions({
+      getBets: 'getBets',
+    }),
+  },
 }
 </script>
 

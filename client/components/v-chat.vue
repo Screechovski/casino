@@ -1,170 +1,168 @@
 <template>
-    <div
-        class="chat"
-        :class="{[cssClass]: cssClass}"
-        ref="chat"
-        :style="`
+  <div
+    class="chat"
+    :class="{ [cssClass]: cssClass }"
+    ref="chat"
+    :style="`
             transform: translate(${movePosition[0]}px, ${movePosition[1]}px);
             left: ${staticPosition[0]}px;
             bottom: ${staticPosition[1]}px;
         `"
-        @dblclick="resetChatPosition"
-    >
-        <div class="chat__header">
-            <button
-                class="chat__arrow-down"
-                :class="{'active': !isOpen}"
-                @click="toggleOpened"
-            >
-                <s-arrow-down />
-            </button>
-            <button
-                class="chat__transfer"
-                @mousedown="moveMousedownHandler"
-
-            >
-                <s-move />
-            </button>
-        </div>
-        <ul 
-            class="chat__messages" 
-            v-if="isOpen" 
-            ref="messages-wrapper"
-        >
-            <li 
-                class="chat__message" 
-                v-for="m, i in messages" 
-                :key="i"
-                :class="messageClass(m.ownerId)"
-            >
-                <span class="name">{{m.ownerName}}:</span>
-                <span class="date">{{getDate(m.timestamp)}}</span>
-                <p class="text">{{m.message}}</p>
-            </li>
-        </ul>
-        <form class="chat__form" v-if="isOpen" @submit.prevent="send">
-            <input 
-                type="text" 
-                class="my-input chat__input"
-                @input="inputHandler"
-                :value="message"
-            >
-            <button 
-                type="button" 
-                class="chat__send"
-                :disabled="!canSend"
-                :value="message"
-                @click="send"
-            >Отправить</button>
-        </form>
+    @dblclick="resetChatPosition"
+  >
+    <div class="chat__header">
+      <button
+        class="chat__arrow-down"
+        :class="{ active: !isOpen }"
+        @click="toggleOpened"
+      >
+        <s-arrow-down />
+      </button>
+      <button class="chat__transfer" @mousedown="moveMousedownHandler">
+        <s-move />
+      </button>
     </div>
+    <ul class="chat__messages" v-if="isOpen" ref="messages-wrapper">
+      <li
+        class="chat__message"
+        v-for="(m, i) in messages"
+        :key="i"
+        :class="messageClass(m.ownerId)"
+      >
+        <span class="name">{{ m.ownerName }}:</span>
+        <span class="date">{{ getDate(m.timestamp) }}</span>
+        <p class="text">{{ m.message }}</p>
+      </li>
+    </ul>
+    <form class="chat__form" v-if="isOpen" @submit.prevent="send">
+      <input
+        type="text"
+        class="my-input chat__input"
+        @input="inputHandler"
+        :value="message"
+      />
+      <button
+        type="button"
+        class="chat__send"
+        :disabled="!canSend"
+        :value="message"
+        @click="send"
+      >
+        Отправить
+      </button>
+    </form>
+  </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import SArrowDown from "../svg/s-arrow-down";
-import SMove from "../svg/s-move";
+import { mapActions, mapGetters } from 'vuex'
+import SArrowDown from '../svg/s-arrow-down'
+import SMove from '../svg/s-move'
 
 export default {
-    data: () =>({
-        isOpen: true,
-        movePositionStart: [],
-        movePosition: [5, 5],
-        staticPosition: [5, 5]
+  data: () => ({
+    isOpen: true,
+    movePositionStart: [],
+    movePosition: [5, 5],
+    staticPosition: [5, 5],
+  }),
+  components: {
+    SArrowDown,
+    SMove,
+  },
+  props: {
+    cssClass: {
+      type: String,
+      defualt: '',
+    },
+  },
+  computed: {
+    ...mapGetters({
+      canSend: 'chat/canSendMessage',
+      messages: 'chat/messages',
+      message: 'chat/message',
+      userId: 'user/id',
     }),
-    components: {
-        SArrowDown,
-        SMove
+    getDate: (state) => (timestamp) => {
+      const date = new Date(timestamp)
+      const m = date.getMinutes()
+      const h = date.getHours()
+      const dd = date.getDate()
+      const mm = date.getMonth() + 1
+      const yy = date.getFullYear()
+
+      return `${dd}/${mm}/${yy} ${h}:${m}`
     },
-    props: {
-        cssClass: {
-            type: String,
-            defualt: ""
-        }
+    messageClass: (state) => (ownerId) => {
+      if (state.userId === ownerId) {
+        return 'me'
+      }
+      return ''
     },
-    computed: {
-        ...mapGetters({
-            canSend: 'chat/canSendMessage',
-            messages: 'chat/messages',
-            message: 'chat/message',
-            userId: 'user/id',
-        }),
-        getDate: (state) => (timestamp) => {
-            const date = new Date(timestamp);
-            const m = date.getMinutes();
-            const h = date.getHours();
-            const dd = date.getDate();
-            const mm = date.getMonth() + 1;
-            const yy = date.getFullYear();
-
-            return `${dd}/${mm}/${yy} ${h}:${m}`
-        },
-        messageClass: (state) => (ownerId) => {
-            if (state.userId === ownerId) {
-                return "me";
-            }
-            return "";
-        }
+  },
+  methods: {
+    ...mapActions({
+      inputHandler: 'chat/writeMessage',
+      getMessages: 'chat/getMessages',
+      send: 'chat/sendMessage',
+      messagesWatcher: 'chat/messagesWatcher',
+    }),
+    toggleOpened() {
+      this.isOpen = !this.isOpen
     },
-    methods: {
-        ...mapActions({
-            inputHandler: 'chat/writeMessage',
-            getMessages: 'chat/getMessages',
-            send: 'chat/sendMessage',
-            messagesWatcher: 'chat/messagesWatcher'
-        }),
-        toggleOpened(){
-            this.isOpen = !this.isOpen
-        },
-        moveMousedownHandler(e){
-            window.addEventListener("mousemove", this.documentMoveHandler)
-            window.addEventListener("mouseup", this.documentMouseupHandler)
-            document.body.style.cursor = "move";
-            this.movePositionStart = [e.clientX, e.clientY];
-        },
-        documentMoveHandler(e){
-            const [x, y] = this.movePositionStart;
-
-            let newX = (x - e.clientX) * -1;
-            let newY = (y - e.clientY) * -1;
-
-            this.movePosition = [newX, newY]
-        },
-        documentMouseupHandler(){
-            let { height, top, left, width } = this.$refs.chat.getBoundingClientRect();
-            let x;
-            let y;
-            let right;
-            right = window.innerWidth - width - 5;
-
-            x = left > right ? right : left;
-            top = top >= 5 ? top : 5;
-            y = window.innerHeight - height - top;
-
-            y = y >= 5 ? y : 5;
-            x = x >= 5 ? x : 5;
-
-            this.staticPosition = [x, y]
-            this.movePosition = [0, 0]
-
-            window.removeEventListener("mousemove", this.documentMoveHandler)
-            window.removeEventListener("mouseup", this.documentMouseupHandler)
-            document.body.style.cursor = "default";
-        },
-        resetChatPosition(){
-            this.staticPosition = [5, 5]
-        },
-        scrollDown(){
-            setTimeout(() => this.$refs["messages-wrapper"].scrollTo({
-                top: this.$refs["messages-wrapper"].scrollHeight + 200,
-                behavior: 'smooth'
-            }), 2)
-        }
+    moveMousedownHandler(e) {
+      window.addEventListener('mousemove', this.documentMoveHandler)
+      window.addEventListener('mouseup', this.documentMouseupHandler)
+      document.body.style.cursor = 'move'
+      this.movePositionStart = [e.clientX, e.clientY]
     },
-    mounted() {
-        this.getMessages()
-        this.messagesWatcher(this.scrollDown)
+    documentMoveHandler(e) {
+      const [x, y] = this.movePositionStart
+
+      let newX = (x - e.clientX) * -1
+      let newY = (y - e.clientY) * -1
+
+      this.movePosition = [newX, newY]
     },
+    documentMouseupHandler() {
+      let { height, top, left, width } = this.$refs.chat.getBoundingClientRect()
+      let x
+      let y
+      let right
+      right = window.innerWidth - width - 5
+
+      x = left > right ? right : left
+      top = top >= 5 ? top : 5
+      y = window.innerHeight - height - top
+
+      y = y >= 5 ? y : 5
+      x = x >= 5 ? x : 5
+
+      this.staticPosition = [x, y]
+      this.movePosition = [0, 0]
+
+      window.removeEventListener('mousemove', this.documentMoveHandler)
+      window.removeEventListener('mouseup', this.documentMouseupHandler)
+      document.body.style.cursor = 'default'
+    },
+    resetChatPosition() {
+      this.staticPosition = [5, 5]
+    },
+    scrollDown() {
+      setTimeout(
+        () =>
+          this.$refs['messages-wrapper'].scrollTo({
+            top: this.$refs['messages-wrapper'].scrollHeight + 200,
+            behavior: 'smooth',
+          }),
+        2,
+      )
+    },
+  },
+  mounted() {
+    this.getMessages()
+    this.messagesWatcher(this.scrollDown)
+  },
 }
 </script>
 
@@ -248,7 +246,7 @@ export default {
             color: #dbdbdb
             margin-left: auto
             grid-template-columns: 1fr
-            grid-template-rows: 1fr auto 
+            grid-template-rows: 1fr auto
             grid-template-areas: "message" "date"
             .name
                 display: none

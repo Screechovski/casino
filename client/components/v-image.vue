@@ -1,38 +1,40 @@
 <template>
-    <div class="won-line">
-        <div
-            class="won-line__track"
-            ref="track"
-            :class="{ transitionClass, transformClass }">
-            <div
-                v-for="(c, i) in fakeColors"
-                :key="c + i"
-                class="won-line__item"
-                :class="c + ' ' + i" />
-        </div>
+  <div class="won-line">
+    <div
+      class="won-line__track"
+      ref="track"
+      :class="{ transitionClass, transformClass }"
+    >
+      <div
+        v-for="(c, i) in fakeColors"
+        :key="c + i"
+        class="won-line__item"
+        :class="c + ' ' + i"
+      />
     </div>
+  </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex"
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-    computed: {
-        ...mapGetters({
-            transitionClass: 'spinner/transitionClass',
-            transformClass: 'spinner/transformClass',
-            fakeColors: 'spinner/colorsArray'
-        })
-    },
-    data:()=>({}),
-    mounted(){
-        this.$refs.track.addEventListener('transitionend', this.spinningEnd)
-    },
-    methods: {
-        ...mapActions({
-            spinningEnd: 'spinningEnd'
-        })
-    }
+  computed: {
+    ...mapGetters({
+      transitionClass: 'spinner/transitionClass',
+      transformClass: 'spinner/transformClass',
+      fakeColors: 'spinner/colorsArray',
+    }),
+  },
+  data: () => ({}),
+  mounted() {
+    this.$refs.track.addEventListener('transitionend', this.spinningEnd)
+  },
+  methods: {
+    ...mapActions({
+      spinningEnd: 'spinningEnd',
+    }),
+  },
 }
 </script>
 

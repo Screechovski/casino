@@ -1,31 +1,31 @@
 <template>
-    <ul class="alerts">
-        <li
-            v-for="alert in alerts"
-            :key="alert.key"
-            :class="alert.type"
-            class="alerts__item"
-            @click="() => remove(alert.key)"
-        >
-            <span class="text">{{alert.message}}</span>
-        </li>
-    </ul>
+  <ul class="alerts">
+    <li
+      v-for="alert in alerts"
+      :key="alert.key"
+      :class="alert.type"
+      class="alerts__item"
+      @click="() => remove(alert.key)"
+    >
+      <span class="text">{{ alert.message }}</span>
+    </li>
+  </ul>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex"
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-    computed: {
-        ...mapGetters({
-            alerts: 'alerts/alerts'
-        }),
-    },
-    methods: {
-        ...mapActions({
-            remove: 'alerts/removeAlert'
-        })
-    }
+  computed: {
+    ...mapGetters({
+      alerts: 'alerts/alerts',
+    }),
+  },
+  methods: {
+    ...mapActions({
+      remove: 'alerts/removeAlert',
+    }),
+  },
 }
 </script>
 
