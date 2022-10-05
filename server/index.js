@@ -25,17 +25,18 @@ app.post('/casino/bets', bets);
 app.post('/casino/user', user);
 app.get('/casino/messages', messages);
 
-app.get('/*', (req, res) => {
-  try {
-    if (/\.(js|css|jpe?g|png|webp|json)$/i.test(req.originalUrl)) {
-      res.sendFile(path.join(__dirname, `/public${req.originalUrl}`));
-    } else {
-      res.sendFile(path.join(__dirname, '/public/build/index.html'));
-    }
-  } catch (error) {
-    res.sendFile(path.join(__dirname, '/public/build/index.html'));
-  }
-});
+// app.get('/*', (req, res) => {
+//   console.log(req.originalUrl);
+//   try {
+//     if (/\.(js|css|jpe?g|png|webp|json)$/i.test(req.originalUrl)) {
+//       res.sendFile(path.join(__dirname, `/public${req.originalUrl}`));
+//     } else {
+//       res.sendFile(path.join(__dirname, '/index.html'));
+//     }
+//   } catch (error) {
+//     res.sendFile(path.join(__dirname, '/index.html'));
+//   }
+// });
 
 server.listen(3000, () => console.log('Example app listening on port 3000'));
 
