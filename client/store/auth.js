@@ -1,5 +1,5 @@
-import router from '../router'
-import { url } from './../helper/common'
+import router from '../router';
+import {url} from './../helper/common';
 
 const auth = {
   namespaced: true,
@@ -10,21 +10,18 @@ const auth = {
   actions: {
     login: (context) =>
       new Promise(async (resolve, reject) => {
-        const checkResult = await context.dispatch('check')
-        let name = 'game'
+        const checkResult = await context.dispatch('check');
+        let name = 'game';
 
         if (checkResult.id === null) {
-          context.dispatch('user/setIsUser', false, { root: true })
+          context.dispatch('user/setIsUser', false, {root: true});
 
-          name = 'hero'
+          name = 'hero';
         } else {
-          const userDataResult = await context.dispatch(
-            'getUserData',
-            checkResult.id,
-          )
-          const { name, id, balance, betsHistory } = userDataResult
+          const userDataResult = await context.dispatch('getUserData', checkResult.id);
+          const {name, id, balance, betsHistory} = userDataResult;
 
-          context.dispatch('connect', { name, id }, { root: true })
+          context.dispatch('connect', {name, id}, {root: true});
           context.dispatch(
             'user/setUserData',
             {
@@ -32,40 +29,40 @@ const auth = {
               balance,
               id,
               betsHistory,
-              isUser: true,
+              isUser: true
             },
-            { root: true },
-          )
+            {root: true}
+          );
         }
-        resolve(router.push({ name }))
+        resolve(router.push({name}));
       }),
     async check(context) {
-      const checkResult = await fetch(url('/check'))
-      const { data } = await checkResult.json()
+      const checkResult = await fetch(url('/check'));
+      const {data} = await checkResult.json();
 
-      return data
+      return data;
     },
     async register(context) {
       const registerResult = await fetch(url('/register'), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: context.rootGetters['user/name'] }),
-      })
-      const { data } = await registerResult.json()
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name: context.rootGetters['user/name']})
+      });
+      const {data} = await registerResult.json();
 
-      return data
+      return data;
     },
     async getUserData(context, id) {
       const userResult = await fetch(url(`/user`), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id }),
-      })
-      const { data } = await userResult.json()
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id})
+      });
+      const {data} = await userResult.json();
 
-      return data
-    },
-  },
-}
+      return data;
+    }
+  }
+};
 
-export default auth
+export default auth;

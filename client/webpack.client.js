@@ -1,6 +1,6 @@
-const path = require('path')
-const { VueLoaderPlugin } = require('vue-loader')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path');
+const {VueLoaderPlugin} = require('vue-loader');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: ['./client/main.js'],
@@ -8,7 +8,7 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/,
-        use: 'vue-loader',
+        use: 'vue-loader'
       },
       {
         test: /\.sass$/,
@@ -19,46 +19,46 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               sassOptions: {
-                indentedSyntax: true,
-              },
-            },
-          },
-        ],
+                indentedSyntax: true
+              }
+            }
+          }
+        ]
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader']
       },
       {
         test: /\.pug$/,
         oneOf: [
           {
             resourceQuery: /^\?vue/,
-            use: ['pug-plain-loader'],
+            use: ['pug-plain-loader']
           },
           {
-            use: ['raw-loader', 'pug-plain-loader'],
-          },
-        ],
-      },
-    ],
+            use: ['raw-loader', 'pug-plain-loader']
+          }
+        ]
+      }
+    ]
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.vue'],
     alias: {
-      '@': path.resolve(__dirname),
-    },
+      '@': path.resolve(__dirname)
+    }
   },
   plugins: [
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
-      template: './client/index.html',
-    }),
+      template: './client/index.html'
+    })
   ],
   output: {
     filename: 'client.js',
     path: path.resolve(__dirname, '../public'),
-    publicPath: '/casino/',
+    publicPath: '/casino/'
   },
-  watch: true,
-}
+  watch: true
+};

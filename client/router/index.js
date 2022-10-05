@@ -1,27 +1,23 @@
-import {
-  createRouter,
-  createWebHashHistory,
-  createWebHistory,
-} from 'vue-router'
-import hero from '../views/hero.vue'
-import game from '../views/game.vue'
+import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router';
+import hero from '../views/hero.vue';
+import game from '../views/game.vue';
 
 const routes = [
   {
     path: '/casino/hero',
     name: 'hero',
-    component: hero,
+    component: hero
   },
   {
     path: '/casino/game',
     name: 'game',
-    component: game,
-  },
-]
+    component: game
+  }
+];
 
 const router = createRouter({
   history: createWebHistory(), //createWebHashHistory(),
-  routes,
-})
+  routes
+});
 
-export default router
+export default router;

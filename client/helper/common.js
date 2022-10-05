@@ -1,16 +1,16 @@
 export const ruColorsName = (color) => {
   switch (color) {
     case 'gray':
-      return 'серый'
+      return 'серый';
     case 'orange':
-      return 'оранжевый'
+      return 'оранжевый';
     case 'red':
-      return 'красный'
+      return 'красный';
     case 'green':
-      return 'зелёный'
+      return 'зелёный';
   }
-}
+};
 
-export const isProduction = true
+export const isProduction = true;
 
-export const url = (uri) => '/casino' + uri
+export const url = (uri) => '/casino' + uri;

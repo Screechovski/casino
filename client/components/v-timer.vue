@@ -5,24 +5,24 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import {mapActions, mapGetters} from 'vuex';
 
 export default {
   data: () => ({}),
   computed: {
     ...mapGetters({
-      timer: 'timer/time',
-    }),
+      timer: 'timer/time'
+    })
   },
   methods: {
     ...mapActions({
-      start: 'timer/start',
-    }),
+      start: 'timer/start'
+    })
   },
   mounted() {
-    this.start()
-  },
-}
+    this.start();
+  }
+};
 </script>
 
 <style></style>

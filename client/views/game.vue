@@ -34,19 +34,19 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import VImage from '../components/v-image.vue'
-import VUserPanel from '../components/v-user-panel.vue'
-import VWonsHistory from '../components/v-wons-history.vue'
-import VTimer from '../components/v-timer.vue'
-import VUsersBets from '../components/v-users-bets'
-import VProfit from '../components/v-profit'
-import VChat from '../components/v-chat'
-import { COLORS_DATA } from '../helper/game-regulations'
+import {mapActions, mapGetters} from 'vuex';
+import VImage from '../components/v-image.vue';
+import VUserPanel from '../components/v-user-panel.vue';
+import VWonsHistory from '../components/v-wons-history.vue';
+import VTimer from '../components/v-timer.vue';
+import VUsersBets from '../components/v-users-bets';
+import VProfit from '../components/v-profit';
+import VChat from '../components/v-chat';
+import {COLORS_DATA} from '../helper/game-regulations';
 
 export default {
   data: () => ({
-    colors: Object.values(COLORS_DATA),
+    colors: Object.values(COLORS_DATA)
   }),
   components: {
     VImage,
@@ -55,27 +55,27 @@ export default {
     VTimer,
     VUsersBets,
     VProfit,
-    VChat,
+    VChat
   },
   computed: {
     ...mapGetters({
       bettingValue: 'bet/bettingValue',
       canBet: 'bet/canBet',
-      serverCanBet: 'bet/serverCanBet',
-    }),
+      serverCanBet: 'bet/serverCanBet'
+    })
   },
   methods: {
     ...mapActions({
       setBetValue: 'bet/setBetValue',
-      setBetColor: 'sendBet',
+      setBetColor: 'sendBet'
     }),
     inputHandler($event) {
-      const cleanValue = +$event.target.value.trim().replace(/\D/gi, '')
+      const cleanValue = +$event.target.value.trim().replace(/\D/gi, '');
 
-      this.setBetValue(cleanValue)
-    },
-  },
-}
+      this.setBetValue(cleanValue);
+    }
+  }
+};
 </script>
 
 <style lang="sass">

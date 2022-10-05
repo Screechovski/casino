@@ -21,7 +21,7 @@
           @mouseleave="mouseLeaveHandler"
           class="btn btn-green hero__button"
         >
-          {{ buttunHovered ? 'Осуждаю' : 'Служу России!' }}
+          Send
         </button>
       </div>
     </form>
@@ -31,21 +31,21 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import {mapActions, mapGetters} from 'vuex';
 
 export default {
   data: () => ({
-    buttunHovered: false,
+    buttonHovered: false
   }),
   computed: {
     ...mapGetters({
       name: 'user/name',
       user: 'user/isUser',
-      balance: 'user/balance',
+      balance: 'user/balance'
     }),
     canSend() {
-      return this.name.length > 4
-    },
+      return this.name.length > 4;
+    }
   },
   methods: {
     ...mapActions({
@@ -53,45 +53,45 @@ export default {
       register: 'register',
       login: 'login',
       setName: 'user/setName',
-      sendName: 'user/sendName',
+      sendName: 'user/sendName'
     }),
     mouseEnterHandler() {
-      this.buttunHovered = true
+      this.buttonHovered = true;
     },
     mouseLeaveHandler() {
-      this.buttunHovered = false
+      this.buttonHovered = false;
     },
     inputNameHandler($event) {
-      this.setName($event.target.value.replace(/[^a-zа-я]/gi, ''))
-    },
-  },
-}
+      this.setName($event.target.value.replace(/[^a-zа-я]/gi, ''));
+    }
+  }
+};
 </script>
 
 <style lang="sass" scoped>
 .hero
+  display: flex
+  align-items: center
+  justify-content: center
+  height: 100%
+  &__form
     display: flex
-    align-items: center
-    justify-content: center
-    height: 100%
-    &__form
-        display: flex
-        flex-direction: column
-        gap: 7px
-        max-width: 500px
-        label
-            color: #fff
-        div
-            display: flex
-            gap: 15px
-    &__button
-        white-space: nowrap
-        width: 140px
-    &__input
-        border: 1px solid var(--bg-light)
-        background-color: var(--bg)
-        padding: 0.4em 0.8em
-        border-radius: 0.4em
-        outline: none
-        width: 150px
+    flex-direction: column
+    gap: 7px
+    max-width: 500px
+    label
+      color: #fff
+    div
+      display: flex
+      gap: 15px
+  &__button
+    white-space: nowrap
+    width: 140px
+  &__input
+    border: 1px solid var(--bg-light)
+    background-color: var(--bg)
+    padding: 0.4em 0.8em
+    border-radius: 0.4em
+    outline: none
+    width: 150px
 </style>
