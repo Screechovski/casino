@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 
 module.exports = {
   entry: ['./server/index.js'],
@@ -8,19 +8,22 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-        },
-      },
-    ],
+          loader: 'babel-loader'
+        }
+      }
+    ]
   },
   target: 'node',
   externals: {
     bufferutil: 'bufferutil',
-    'utf-8-validate': 'utf-8-validate',
+    'utf-8-validate': 'utf-8-validate'
+  },
+  resolve: {
+    fallback: {os: false}
   },
   output: {
     filename: 'server.js',
-    path: path.resolve(__dirname, '../public'),
+    path: path.resolve(__dirname, '../public')
   },
-  watch: true,
-}
+  watch: true
+};
