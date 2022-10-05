@@ -66,7 +66,10 @@ export const updateUser = (id, params) =>
 export const getBets = () =>
   new Promise((resolve, reject) => {
     try {
-      readFile('database/bets.json', 'utf8', (error, data) => resolve(JSON.parse(data)));
+      readFile('database/bets.json', 'utf8', (error, data) => {
+        if (error) throw error;
+        resolve(JSON.parse(data));
+      });
     } catch (error) {
       reject('db getBets', error);
     }
