@@ -1,5 +1,6 @@
 import {API} from '../../api';
 import router from '../../router';
+import {promoValue} from '../../../config';
 
 export const user = {
   namespaced: true,
@@ -94,8 +95,33 @@ export const user = {
     async sendPromo(context) {
       try {
         context.commit('setPromoDisabled', true);
-        await API.promo(context.state.promo.toUpperCase(), context.state.id);
+        const {has} = await API.promo(
+          context.state.promo.toUpperCase(),
+          context.state.id
+        );
+
+        if (has) {
+          context.dispatch(
+            'alerts/addAlert',
+            {
+              message: 'Промокод на 1000 едениц денег применён',
+              type: 'green'
+            },
+            {root: true}
+          );
+          context.dispatch('bet/plusBalance', promoValue, {root: true});
+        } else {
+          context.dispatch(
+            'alerts/addAlert',
+            {
+              message: 'Промокод недействителен или не существует',
+              type: 'red'
+            },
+            {root: true}
+          );
+        }
         context.commit('setPromoDisabled', false);
+        context.commit('setPromo', '');
       } catch (e) {
         context.commit('setPromoDisabled', false);
         console.warn(e);

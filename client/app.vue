@@ -30,7 +30,7 @@ export default {
   --text-dark: #181818
   --text: #363636
   --text-light: #838383
-  font-family: Roboto, sans-serif
+  font-family: 'Nunito', sans-serif
   height: 100vh
   position: relative
   overflow: hidden
@@ -96,4 +96,8 @@ export default {
   &-gradient
     background-color: #74EBD5
     background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%)
+
+.neon-text
+  color: #fff
+  text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa, 0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa
 </style>

@@ -2,6 +2,7 @@ import {validationResult} from 'express-validator';
 import {HTTP_CODES} from '../assets/helper';
 import {Promos} from '../db/promos';
 import {Users} from '../db/users';
+import {promoValue} from '../../config';
 
 export const promosController = async (req, res) => {
   const validationErrors = validationResult(req);
@@ -18,7 +19,7 @@ export const promosController = async (req, res) => {
 
     if (has) {
       const user = await Users.getAll((u) => u.id === id);
-      await Users.update(id, {balance: user.balance + 1000});
+      await Users.update(id, {balance: user.balance + promoValue});
       await Promos.remove(promo);
     }
 

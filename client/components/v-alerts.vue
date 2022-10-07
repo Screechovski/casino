@@ -37,6 +37,7 @@ export default {
   display: flex
   flex-direction: column
   gap: 8px
+  z-index: 2
   &__item
     padding: 16px
     border-radius: 12px
@@ -46,6 +47,7 @@ export default {
     align-items: center
     justify-content: center
     gap: 9px
+    width: fit-content
     &.red
       background-color: var(--red)
     &.green

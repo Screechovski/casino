@@ -17,6 +17,9 @@ export const bet = {
     setBalance(state, balance) {
       state.balance = balance;
     },
+    plusBalance(state, value) {
+      state.balance = state.balance + value;
+    },
     setBetValue(state, bettingValue) {
       state.bettingValue = bettingValue;
     },
@@ -28,6 +31,10 @@ export const bet = {
     setBalance(context, balance = null) {
       if (balance === null) throw Error('balance is null');
       context.commit('setBalance', balance);
+    },
+    plusBalance(context, value = null) {
+      if (value === null || isNaN(value)) throw Error('value is null');
+      context.commit('plusBalance', value);
     },
     setBetValue(context, value) {
       context.commit('setBetValue', value);
