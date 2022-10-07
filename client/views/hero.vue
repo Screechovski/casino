@@ -1,5 +1,5 @@
 <template>
-  <section class="hero">
+  <section class="hero bg-gradient">
     <div class="hero__loader" v-show="user === null">
       <!-- user === null -->
       <div class="spinner-border text-primary" role="status" />
@@ -7,10 +7,10 @@
 
     <form class="hero__form" v-show="user === false" @submit.prevent="sendName">
       <!-- user === false -->
-      <label for="user-name">Как тебя звать, солдат?</label>
+      <label for="user-name">Ваше имя:</label>
       <div>
         <input
-          id="user-name"
+          id="user-name my-input"
           type="text"
           class="my-input hero__input"
           :value="name"
@@ -19,7 +19,7 @@
         <button
           @mouseenter="mouseEnterHandler"
           @mouseleave="mouseLeaveHandler"
-          class="btn btn-green hero__button"
+          class="my-button my-button--hover hero__button"
         >
           Send
         </button>
@@ -86,12 +86,7 @@ export default {
       gap: 15px
   &__button
     white-space: nowrap
-    width: 140px
+    width: 110px
   &__input
-    border: 1px solid var(--bg-light)
-    background-color: var(--bg)
-    padding: 0.4em 0.8em
-    border-radius: 0.4em
-    outline: none
     width: 150px
 </style>

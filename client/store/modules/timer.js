@@ -1,4 +1,4 @@
-const timer = {
+export const timer = {
   namespaced: true,
   state: () => ({
     time: 0,
@@ -18,5 +18,3 @@ const timer = {
     start: (context) => context.commit('start')
   }
 };
-
-export default timer;

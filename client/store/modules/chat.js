@@ -1,8 +1,8 @@
-import {url} from './../helper/common';
+import {API} from '../../api';
 
 let callbackThis = null;
 
-const chat = {
+export const chat = {
   namespaced: true,
   state: () => ({
     messages: [],
@@ -43,10 +43,9 @@ const chat = {
       callbackThis && callbackThis();
     },
     getMessages: async (context) => {
-      const messages = await fetch(url('/messages'));
-      const {data} = await messages.json();
+      const {messages} = await API.getMessages();
 
-      context.commit('setMessages', data);
+      context.commit('setMessages', messages);
       callbackThis && callbackThis();
     },
     messagesWatcher: (context, callback) => {
@@ -56,5 +55,3 @@ const chat = {
     }
   }
 };
-
-export default chat;

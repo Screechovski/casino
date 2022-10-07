@@ -17,22 +17,27 @@ export default {
 
 <style lang="sass">
 #app
-  --gray: #6c757d
-  --orange: #ffc107
-  --red: #dc3545
-  --green: #198754
-  --bg: #1e1e1e
-  --bg-light: #4d4d4d
+  --gray: #5c5c5c
+  --orange: #fdad00
+  --red: #ff0000
+  --green: #00914e
+  --bg: rgba(255,255,255,0.33)
+  //#1e1e1e
+  --bg-light: rgba(255,255,255,0.33)
+  //#4d4d4d
+  --bg-dark: #ffffff
+  //#141414
+  --text-dark: #181818
+  --text: #363636
+  --text-light: #838383
   font-family: Roboto, sans-serif
   height: 100vh
-  background-color: var(--bg)
   position: relative
   overflow: hidden
 
 .btn
-  color: #ffffff
   border: none
-  border-radius: 0.4em
+  border-radius: 0.55em
   padding: 0.4em 0.8em
   cursor: pointer
   &:disabled
@@ -41,16 +46,54 @@ export default {
   &:active
     transform: scale(0.97)
   &-gray
-    background-color: var(--gray)
+    background-color: transparent
+    border: 2px solid var(--gray)
+    color: var(--gray)
   &-orange
-    background-color: var(--orange)
-    color: #000000
+    background-color: transparent
+    border: 2px solid var(--orange)
+    color: var(--orange)
   &-red
-    background-color: var(--red)
+    background-color: transparent
+    border: 2px solid var(--red)
+    color: var(--red)
   &-green
-    background-color: var(--green)
+    background-color: transparent
+    border: 2px solid var(--green)
+    color: var(--green)
 
 .my-input
-  background-color: #1e1e1e !important
-  color: #ffffff !important
+  background-color: transparent
+  color: #ffffff
+  outline: none
+  border: 2px solid #ffffff
+  padding: 0.4em
+  border-radius: 0.55em
+  &:focus
+    background-color: hsla(0, 0%, 0%, 0.1)
+
+.my-button
+  color: #ffffff
+  outline: none
+  border: 2px solid #ffffff
+  padding: 0.4em
+  background-color: hsla(0, 0%, 100%, 0.2)
+  border-radius: 0.55em
+  &--hover
+    cursor: pointer
+    &:hover
+      background-color: hsla(0,0%,100%,0)
+
+.bg
+  &-blur
+    background-color: hsla(0,0%,100%,0.13)
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1)
+    &--hover
+      cursor: pointer
+      &:hover
+        background-color: hsla(0,0%,100%,0)
+
+  &-gradient
+    background-color: #74EBD5
+    background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%)
 </style>

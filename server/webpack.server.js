@@ -1,7 +1,9 @@
 const path = require('path');
+const {isProd} = require('../config');
 
 module.exports = {
-  entry: ['./server/index.js'],
+  entry: './server/index.js',
+  mode: isProd ? 'production' : 'development',
   module: {
     rules: [
       {
@@ -25,5 +27,5 @@ module.exports = {
     filename: 'server.js',
     path: path.resolve(__dirname, '../public')
   },
-  watch: true
+  watch: !isProd
 };

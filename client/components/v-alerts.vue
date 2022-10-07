@@ -41,7 +41,7 @@ export default {
     padding: 16px
     border-radius: 12px
     font-size: 16px
-    color: #fff
+    color: #ffffff
     display: flex
     align-items: center
     justify-content: center

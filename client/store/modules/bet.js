@@ -1,4 +1,4 @@
-const bet = {
+export const bet = {
   namespaced: true,
   state: () => ({
     balance: null,
@@ -40,5 +40,3 @@ const bet = {
     }
   }
 };
-
-export default bet;

@@ -1,6 +1,6 @@
-import {defaultGettersList} from '../helper/store';
+import {defaultGettersList} from '../../helper/store';
 
-const usersBets = {
+export const usersBets = {
   namespaced: true,
   state: () => ({
     gray: [],
@@ -39,5 +39,3 @@ const usersBets = {
     }
   }
 };
-
-export default usersBets;

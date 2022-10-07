@@ -1,29 +1,32 @@
 import {readFile, writeFile} from 'fs';
+import path from 'path';
+
+const dbPath = path.join(__dirname, '../database/messages.json');
 
 export const Messages = {
-  get: () =>
-    new Promise((resolve, reject) => {
+  get() {
+    return new Promise((resolve, reject) => {
       try {
-        readFile('database/messages.json', 'utf8', (error, data) => {
+        readFile(dbPath, 'utf8', (error, data) => {
           if (error) throw error;
           resolve(JSON.parse(data));
         });
       } catch (error) {
-        reject('db getMessages', error);
+        console.log(error);
+        reject('db messages get');
       }
-    }),
-  set: (message) =>
-    new Promise(async (resolve, reject) => {
+    });
+  },
+  set(message) {
+    return new Promise(async (resolve, reject) => {
       try {
         const messages = await this.get();
 
-        writeFile(
-          'database/messages.json',
-          JSON.stringify([...messages, message]),
-          resolve
-        );
+        writeFile(dbPath, JSON.stringify([...messages, message]), resolve);
       } catch (error) {
-        reject('db addMessage', error);
+        console.log(error);
+        reject('db messages set');
       }
-    })
+    });
+  }
 };

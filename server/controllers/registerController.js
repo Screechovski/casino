@@ -11,6 +11,7 @@ export const registerController = async (req, res) => {
   }
 
   try {
+    const ip = req._ip;
     const name = req.body.name.trim();
     await Users.set(ip, name);
     const user = await Users.getAll((u) => u.ip === ip);

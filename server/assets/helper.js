@@ -1,5 +1,7 @@
 import {getColor, getValue} from './gameRegulations';
 
+let preventColors = [];
+
 export const HTTP_CODES = {
   OK_200: 200,
   CREATED_201: 201,
@@ -12,6 +14,7 @@ export const HTTP_CODES = {
 
   SERVER_ERROR_500: 500
 };
+
 export const cleanItems = (array) => {
   if (array.length > 25) {
     return array.slice(Math.max(array.length - 25, 1));

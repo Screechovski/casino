@@ -1,16 +1,16 @@
 import {io} from 'socket.io-client';
-import spinner from './spinner';
-import user from './user';
-import alerts from './alerts';
-import auth from './auth';
-import bet from './bet';
-import usersBets from './users-bets';
-import timer from './timer';
-import chat from './chat';
 import {createStore} from 'vuex';
-import {isProduction, ruColorsName} from '../helper/common';
-
-const url = (uri) => '/casino' + uri;
+import {ruColorsName} from '../helper/common';
+import {API} from '../api';
+import {spinner} from './modules/spinner';
+import {user} from './modules/user';
+import {alerts} from './modules/alerts';
+import {auth} from './modules/auth';
+import {bet} from './modules/bet';
+import {usersBets} from './modules/users-bets';
+import {timer} from './modules/timer';
+import {chat} from './modules/chat';
+const {isProd} = require('../../config');
 
 let socket = null;
 
@@ -44,7 +44,7 @@ export default new createStore({
   },
   actions: {
     connect(context, {name, id}) {
-      socket = io(isProduction ? 'http://dmyavl.ru' : 'http://localhost:3000', {
+      socket = io(isProd ? 'http://dmyavl.ru' : 'http://localhost:3000', {
         path: '/socket.io',
         reconnectionDelayMax: 10000
       });
@@ -55,7 +55,8 @@ export default new createStore({
         socket.on('LAST_GAME', (jsonData) => {
           const {lastGame} = JSON.parse(jsonData);
 
-          lastGame.length > 0 && context.dispatch('spinner/setColors', {colorsLine: lastGame});
+          lastGame.length > 0 &&
+            context.dispatch('spinner/setColors', {colorsLine: lastGame});
         });
 
         socket.on('CASINO_PROFIT', (data) => {
@@ -118,14 +119,9 @@ export default new createStore({
       });
     },
     async getBets(context) {
-      const betsResult = await fetch(url('/bets'), {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({id: context.rootGetters['user/id']})
-      });
-      const {data} = await betsResult.json();
+      const {bets} = await API.getBets(context.rootGetters['user/id']);
 
-      context.commit('setWonsHistory', data);
+      context.commit('setWonsHistory', bets);
     },
     async sendBet(context, color) {
       const value = context.rootGetters['bet/bettingValue'];

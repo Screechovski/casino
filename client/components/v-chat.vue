@@ -1,6 +1,6 @@
 <template>
   <div
-    class="chat"
+    class="chat bg-blur"
     :class="{[cssClass]: cssClass}"
     ref="chat"
     :style="`
@@ -11,10 +11,17 @@
     @dblclick="resetChatPosition"
   >
     <div class="chat__header">
-      <button class="chat__arrow-down" :class="{active: !isOpen}" @click="toggleOpened">
+      <button
+        class="chat__arrow-down bg-blur bg-blur--hover"
+        :class="{active: !isOpen}"
+        @click="toggleOpened"
+      >
         <s-arrow-down />
       </button>
-      <button class="chat__transfer" @mousedown="moveMousedownHandler">
+      <button
+        class="chat__transfer bg-blur bg-blur--hover"
+        @mousedown="moveMousedownHandler"
+      >
         <s-move />
       </button>
     </div>
@@ -31,8 +38,19 @@
       </li>
     </ul>
     <form class="chat__form" v-if="isOpen" @submit.prevent="send">
-      <input type="text" class="my-input chat__input" @input="inputHandler" :value="message" />
-      <button type="button" class="chat__send" :disabled="!canSend" :value="message" @click="send">
+      <input
+        type="text"
+        class="my-input chat__input"
+        @input="inputHandler"
+        :value="message"
+      />
+      <button
+        type="button"
+        class="chat__send my-button"
+        :disabled="!canSend"
+        :value="message"
+        @click="send"
+      >
         Отправить
       </button>
     </form>
@@ -70,19 +88,31 @@ export default {
     }),
     getDate: (state) => (timestamp) => {
       const date = new Date(timestamp);
-      const m = date.getMinutes();
-      const h = date.getHours();
-      const dd = date.getDate();
-      const mm = date.getMonth() + 1;
-      const yy = date.getFullYear();
+      let m = date.getMinutes();
+      let h = date.getHours();
+      let dd = date.getDate();
+      let mm = date.getMonth() + 1;
+      let yy = date.getFullYear();
 
-      return `${dd}/${mm}/${yy} ${h}:${m}`;
+      const ifTo = (p = '') => {
+        if (p.toString().length === 1) {
+          return `0${p}`;
+        }
+        return p;
+      };
+
+      m = ifTo(m);
+      h = ifTo(h);
+      dd = ifTo(dd);
+      mm = ifTo(mm);
+
+      return `${dd}.${mm}.${yy} ${h}:${m}`;
     },
     messageClass: (state) => (ownerId) => {
       if (state.userId === ownerId) {
         return 'me';
       }
-      return '';
+      return 'bg-blur';
     }
   },
   methods: {
@@ -160,7 +190,6 @@ export default {
   width: 300px
   padding: 3px
   border-radius: 8px
-  background-color: #2c2c2c
   &__header
     display: flex
     gap: 5px
@@ -170,7 +199,7 @@ export default {
     padding: 0
     border-radius: 5px
     border: none
-    background-color: #363636
+    background-color: var(--bg-light)
     display: flex
     align-items: center
     justify-content: center
@@ -182,7 +211,7 @@ export default {
       svg
         height: 100%
         width: 100%
-        fill: #000000
+        fill: var(--bg-dark)
   &__arrow-down
     cursor: pointer
     &.active
@@ -211,24 +240,21 @@ export default {
     .name
       font-size: 13px
       grid-area: name
-      color: #727272
+      color: var(--text-light)
     .date
       font-size: 13px
       grid-area: date
       text-align: right
-      color: #727272
+      color: var(--text-light)
     .text
       grid-area: message
     &:not(.me)
-      background-color: #4f4f4f
       margin-right: auto
-      color: #cbcbcb
       grid-template-columns: 1fr 1fr
       grid-template-rows: auto 1fr
       grid-template-areas: "name date" "message message"
     &.me
-      background-color: #141414
-      color: #dbdbdb
+      background-color: #fff
       margin-left: auto
       grid-template-columns: 1fr
       grid-template-rows: 1fr auto
@@ -238,19 +264,15 @@ export default {
   &__input
     border: 1px solid var(--bg-light)
     padding: 0.4em 0.8em
-    border-radius: 0.4em
+    border-radius: 0.55em
     outline: none
     width: calc(100% - 115px)
   &__send
-    background-color: #363636
     width: 110px
     padding: 0px
     display: flex
     align-items: center
     justify-content: center
-    border-radius: 0.4em
-    border: none
-    color: #dbdbdb
     cursor: pointer
     &:disabled
       cursor: not-allowed

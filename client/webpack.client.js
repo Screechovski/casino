@@ -1,9 +1,11 @@
 const path = require('path');
 const {VueLoaderPlugin} = require('vue-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const {isProd} = require('../config');
 
 module.exports = {
-  entry: ['./client/main.js'],
+  entry: './client/main.js',
+  mode: isProd ? 'production' : 'development',
   module: {
     rules: [
       {
@@ -56,9 +58,9 @@ module.exports = {
     })
   ],
   output: {
-    filename: 'client.js',
+    filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, '../public'),
-    publicPath: '/casino/'
+    publicPath: isProd ? '/casino/' : '/'
   },
-  watch: true
+  watch: !isProd
 };

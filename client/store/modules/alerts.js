@@ -1,4 +1,4 @@
-const alerts = {
+export const alerts = {
   namespaced: true,
   state: () => ({
     alerts: []
@@ -26,5 +26,3 @@ const alerts = {
     }
   }
 };
-
-export default alerts;

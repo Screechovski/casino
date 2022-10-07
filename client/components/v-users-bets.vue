@@ -123,10 +123,6 @@ export default {
     margin-bottom: 5px
     width: 100%
     padding: 13px 16px !important
-    &.gray
-    &.orange
-    &.red
-    &.green
     span
       &:nth-child(2)
         display: flex
@@ -135,10 +131,11 @@ export default {
           margin-right: 5px
 
 .bets-column
-  height: 200px
-  max-height: 200px
+  height: auto
+  max-height: 118px
+  min-height: 118px
   overflow: auto
-  padding: 0px 5px 5px 5px
+  padding: 0 5px 5px 5px
   gap: 5px
   display: flex
   flex-direction: column

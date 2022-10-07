@@ -1,4 +1,4 @@
-const spinner = {
+export const spinner = {
   namespaced: true,
   state: () => ({
     transitionClassState: false,
@@ -47,5 +47,3 @@ const spinner = {
     }
   }
 };
-
-export default spinner;

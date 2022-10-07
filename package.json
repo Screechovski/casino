@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server-build": "webpack --mode production --config ./server/webpack.server.js",
-    "server-dev": "webpack --mode development --config ./server/webpack.server.js",
-    "client-build": "webpack --mode production --config ./client/webpack.client.js",
-    "client-dev": "webpack --mode development --config ./client/webpack.client.js",
+    "server": "webpack --config ./server/webpack.server.js",
+    "client": "webpack --config ./client/webpack.client.js",
     "start-server": "nodemon ./public/server.js --ignore ./database"
   },
   "keywords": [],
@@ -19,9 +17,9 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/runtime": "^7.17.9",
     "babel-loader": "^8.1.0",
-    "body-parser": "^1.20.0",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
+    "express-validator": "^6.14.2",
     "normalize.css": "^8.0.1",
     "prettier": "^2.7.1",
     "request-ip": "^2.1.3",

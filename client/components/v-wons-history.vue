@@ -1,7 +1,12 @@
 <template>
   <div class="wons-history" :class="cssClass">
-    <ul class="wons-history__list">
-      <li v-for="(item, i) in items" :key="i" class="wons-history__item" :class="item"></li>
+    <ul class="wons-history__list bg-blur">
+      <li
+        v-for="(item, i) in items"
+        :key="i"
+        class="wons-history__item"
+        :class="item"
+      ></li>
     </ul>
   </div>
 </template>
@@ -45,6 +50,8 @@ export default {
     flex-direction: row-reverse
     gap: 5px
     height: 30px
+    padding: 5px
+    border-radius: 0.55em
   &__item
     width: 10px
     height: 0

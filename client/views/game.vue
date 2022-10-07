@@ -1,5 +1,5 @@
 <template>
-  <section class="application">
+  <section class="application bg-gradient">
     <v-chat cssClass="application__chat" />
     <v-profit cssClass="application__profit" />
     <div class="application__body">
@@ -42,7 +42,7 @@ import VTimer from '../components/v-timer.vue';
 import VUsersBets from '../components/v-users-bets';
 import VProfit from '../components/v-profit';
 import VChat from '../components/v-chat';
-import {COLORS_DATA} from '../helper/game-regulations';
+import {COLORS_DATA} from '../helper/common';
 
 export default {
   data: () => ({
@@ -84,7 +84,7 @@ export default {
   display: flex
   flex-direction: column
   align-items: center
-  justify-content: flex-end
+  justify-content: center
   gap: 70px
   box-sizing: border-box
   padding-bottom: 5px
@@ -100,9 +100,8 @@ export default {
     z-index: 2
   &__input
     border: 1px solid var(--bg-light)
-    background-color: var(--bg)
     padding: 0.4em 0.8em
-    border-radius: 0.4em
+    border-radius: 0.55em
     outline: none
     width: 100px
   &__body
