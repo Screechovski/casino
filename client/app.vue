@@ -16,20 +16,12 @@ export default {
 </script>
 
 <style lang="sass">
+@tailwind base
+@tailwind components
+@tailwind utilities
+
 #app
-  --gray: #5c5c5c
-  --orange: #fdad00
-  --red: #ff0000
-  --green: #00914e
-  --bg: rgba(255,255,255,0.33)
-  //#1e1e1e
-  --bg-light: rgba(255,255,255,0.33)
-  //#4d4d4d
-  --bg-dark: #ffffff
-  //#141414
-  --text-dark: #181818
-  --text: #363636
-  --text-light: #838383
+  background-color: black
   font-family: 'Nunito', sans-serif
   height: 100vh
   position: relative
@@ -84,20 +76,47 @@ export default {
     &:hover
       background-color: hsla(0,0%,100%,0)
 
-.bg
-  &-blur
-    background-color: hsla(0,0%,100%,0.13)
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1)
-    &--hover
-      cursor: pointer
-      &:hover
-        background-color: hsla(0,0%,100%,0)
-
-  &-gradient
-    background-color: #74EBD5
-    background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%)
-
-.neon-text
-  color: #fff
-  text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa, 0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa
+.neon
+  --blurTextColor: 0.65em
+  --blurTextWhite: 0.1em
+  --color: white
+  --blurBorderColor: 0.65em
+  --blurBorderWhite: 0.1em
+  --borderWidth: 2px
+  filter: saturate(60%)
+  font-weight: 200
+  &--text
+    color: #fff
+    text-shadow: 0 0 var(--blurTextColor) var(--color),0 0 var(--blurTextColor) var(--color), 0 0 var(--blurTextColor) var(--color), 0 0 var(--blurTextColor) var(--color), 0 0 var(--blurTextColor) var(--color), 0 0 var(--blurTextWhite) white, 0 0 var(--blurTextWhite) white, 0 0 var(--blurTextWhite) white, 0 0 var(--blurTextWhite) white
+  &--border
+    background-color: transparent
+    border: var(--borderWidth) solid #fff
+    box-shadow: 0 0 var(--blurBorderColor) var(--color), 0 0 var(--blurBorderWhite) white, inset 0 0 var(--blurBorderColor) var(--color), inset 0 0 var(--blurBorderWhite) white
+  &--solid
+    background-color: var(--color)
+    box-shadow: 0 0 var(--blurBorderColor) var(--color), 0 0 var(--blurBorderWhite) white, inset 0 0 var(--blurBorderColor) var(--color), inset 0 0 var(--blurBorderWhite) white
+  &--icon
+    svg
+      fill: #fff
+      filter: drop-shadow(0 0 var(--blurTextColor) var(--color))
+      //, drop-shadow(0 0 var(--blurTextColor) var(--color)),drop-shadow(0 0 var(--blurTextColor) var(--color)), drop-shadow(0 0 var(--blurTextColor) var(--color)),drop-shadow(0 0 var(--blurTextColor) var(--color)),drop-shadow(0 0 var(--blurTextWhite) white),drop-shadow(0 0 var(--blurTextWhite) white)
+  &--red
+    --color: red
+  &--green
+    --color: lime
+  &--blue
+    --color: #3668ff
+    --blurTextColor: 0.85em
+    --blurBorderColor: 0.85em
+  &--yellow
+    --color: yellow
+  &--pink
+    --color: #ff00f2
+  &--hover:not(:disabled)
+    cursor: pointer
+    &:hover
+      --blurTextColor: 0.85em
+      --blurTextWhite: 0.2em
+      --blurBorderColor: 0.85em
+      --blurBorderWhite: 0.2em
 </style>

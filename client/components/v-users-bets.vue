@@ -4,7 +4,7 @@
       <li class="colors-columns__item">
         <button
           type="button"
-          class="colors-columns__header btn btn-gray"
+          class="colors-columns__header neon neon--border neon--text neon--hover"
           @click="() => setBetColor('gray')"
           :disabled="!canBet"
         >
@@ -15,15 +15,20 @@
           </span>
         </button>
         <ul class="bets-column">
-          <li v-for="(item, i) in gray" :key="i" class="bets-column__item">
-            {{ item.name }} {{ item.bet }}
+          <li
+            v-for="(item, i) in gray"
+            :key="i"
+            class="neon neon--text bets-column__item"
+          >
+            <span>{{ item.name }}</span>
+            <span>{{ item.bet }}</span>
           </li>
         </ul>
       </li>
       <li class="colors-columns__item">
         <button
           type="button"
-          class="colors-columns__header orange btn btn-orange"
+          class="colors-columns__header neon neon--border neon--text neon--hover neon--yellow"
           @click="() => setBetColor('orange')"
           :disabled="!canBet"
         >
@@ -34,15 +39,20 @@
           </span>
         </button>
         <ul class="bets-column">
-          <li v-for="(item, i) in orange" :key="i" class="bets-column__item">
-            {{ item.name }} {{ item.bet }}
+          <li
+            v-for="(item, i) in orange"
+            :key="i"
+            class="neon neon--text bets-column__item"
+          >
+            <span>{{ item.name }}</span>
+            <span>{{ item.bet }}</span>
           </li>
         </ul>
       </li>
       <li class="colors-columns__item">
         <button
           type="button"
-          class="colors-columns__header red btn btn-red"
+          class="colors-columns__header neon neon--border neon--text neon--hover neon--red"
           @click="() => setBetColor('red')"
           :disabled="!canBet"
         >
@@ -53,15 +63,16 @@
           </span>
         </button>
         <ul class="bets-column">
-          <li v-for="(item, i) in red" :key="i" class="bets-column__item">
-            {{ item.name }} {{ item.bet }}
+          <li v-for="(item, i) in red" :key="i" class="neon neon--text bets-column__item">
+            <span>{{ item.name }}</span>
+            <span>{{ item.bet }}</span>
           </li>
         </ul>
       </li>
       <li class="colors-columns__item">
         <button
           type="button"
-          class="colors-columns__header green btn btn-green"
+          class="colors-columns__header neon neon--border neon--text neon--hover neon--green"
           @click="() => setBetColor('green')"
           :disabled="!canBet"
         >
@@ -72,8 +83,13 @@
           </span>
         </button>
         <ul class="bets-column">
-          <li v-for="(item, i) in green" :key="i" class="bets-column__item">
-            {{ item.name }} {{ item.bet }}
+          <li
+            v-for="(item, i) in green"
+            :key="i"
+            class="neon neon--text bets-column__item"
+          >
+            <span>{{ item.name }}</span>
+            <span>{{ item.bet }}</span>
           </li>
         </ul>
       </li>
@@ -115,14 +131,8 @@ export default {
     width: 25%
     min-width: 180px
   &__header
-    text-transform: uppercase
-    overflow: hidden
-    display: flex
-    align-items: center
-    justify-content: space-between
     margin-bottom: 5px
-    width: 100%
-    padding: 13px 16px !important
+    @apply uppercase overflow-hidden flex items-center justify-between w-full rounded-xl h-12 px-4
     span
       &:nth-child(2)
         display: flex
@@ -131,14 +141,10 @@ export default {
           margin-right: 5px
 
 .bets-column
-  height: auto
   max-height: 118px
   min-height: 118px
-  overflow: auto
   padding: 0 5px 5px 5px
-  gap: 5px
-  display: flex
-  flex-direction: column
+  @apply flex flex-col gap-1 overflow-auto
   &::-webkit-scrollbar
     width: 8px
   &::-webkit-scrollbar-track
@@ -150,8 +156,5 @@ export default {
   &::-webkit-scrollbar-thumb:hover
     background: #555
   &__item
-    padding: 10px
-    border-radius: 10px
-    background-color: var(--bg-light)
-    color: #ffffff
+    @apply flex justify-between py-2
 </style>

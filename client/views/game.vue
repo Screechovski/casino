@@ -1,5 +1,5 @@
 <template>
-  <section class="application bg-gradient">
+  <section class="application">
     <v-chat cssClass="application__chat" />
     <v-profit cssClass="application__profit" />
     <div class="application__body">
@@ -11,16 +11,16 @@
       <div class="application__panel">
         <input
           type="text"
-          class="application__input my-input"
+          class="application__input neon neon--border neon--text neon--blue"
           @input="inputHandler"
           :value="bettingValue"
         />
         <button
           v-for="c in colors"
           :key="c.name"
-          class="btn"
+          class="btn neon neon--text neon--hover neon--border"
           :disabled="!canBet"
-          :class="'btn-' + c.name"
+          :class="getButtonClass(c.name)"
           @click="() => setBetColor(c.name)"
         >
           x{{ c.multiply(1) }}
@@ -62,7 +62,13 @@ export default {
       bettingValue: 'bet/bettingValue',
       canBet: 'bet/canBet',
       serverCanBet: 'bet/serverCanBet'
-    })
+    }),
+    getButtonClass() {
+      return (n2) => {
+        if (n2 === 'orange') return 'neon--yellow';
+        return `neon--${n2}`;
+      };
+    }
   },
   methods: {
     ...mapActions({
@@ -85,7 +91,7 @@ export default {
   flex-direction: column
   align-items: center
   justify-content: center
-  gap: 70px
+  gap: 20px
   box-sizing: border-box
   padding-bottom: 5px
   &__profit
@@ -99,17 +105,16 @@ export default {
     left: 5px
     z-index: 2
   &__input
-    border: 1px solid var(--bg-light)
     padding: 0.4em 0.8em
-    border-radius: 0.55em
     outline: none
     width: 100px
+    @apply rounded-xl
   &__body
     display: grid
     grid-template-rows: 1fr 40px
     align-items: center
     justify-items: center
-    gap: 15px
+    gap: 20px
   &__panel
     display: flex
     gap: 7px

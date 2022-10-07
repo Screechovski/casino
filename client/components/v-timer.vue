@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span class="neon neon--text">
     {{ timer }}
   </span>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="user-panel bg-blur" :class="cssClass">
+  <div class="user-panel neon neon--border neon--text" :class="cssClass">
     <p class="user-panel__line">
       <span>Имя:</span>
       <span>{{ name }}</span>
@@ -8,7 +8,7 @@
       <span>Баланс:</span>
       <s-coin />
       <span>{{ balance }}</span>
-      <button class="bg-blur bg-blur--hover" @click="toggleOpened">
+      <button class="neon neon--icon neon--border neon--hover" @click="toggleOpened">
         <s-minus v-if="promoOpened" />
         <s-plus v-else />
       </button>
@@ -17,7 +17,7 @@
       v-if="promoOpened"
       :value="promo"
       @input.prevent="setPromo"
-      class="my-input user-panel__input"
+      class="neon neon--border neon--text neon--blue user-panel__input"
       type="text"
       :disabled="promoDisabled"
     />
@@ -84,20 +84,12 @@ export default {
     button
       height: 24px
       width: 24px
-      display: flex
-      align-items: center
-      justify-content: center
-      border: none
-      border-radius: 5px
-      cursor: pointer
+      @apply rounded-xl flex items-center justify-center
       svg
-        height: 70%
-        width: 70%
-        fill: var(--bg-dark)
+        height: 50%
+        width: 50%
   &__input
-    border: none
     padding: 0.4em 0.8em
-    border-radius: 0.55em
     width: 118px
-    text-transform: uppercase
+    @apply lowercase rounded-xl outline-none
 </style>

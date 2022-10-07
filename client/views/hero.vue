@@ -1,5 +1,5 @@
 <template>
-  <section class="hero bg-gradient">
+  <section class="hero">
     <div class="hero__loader" v-show="user === null">
       <!-- user === null -->
       <div class="spinner-border text-primary" role="status" />

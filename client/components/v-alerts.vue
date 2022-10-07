@@ -3,7 +3,7 @@
     <li
       v-for="alert in alerts"
       :key="alert.key"
-      :class="alert.type"
+      :class="getClass(alert.type)"
       class="alerts__item"
       @click="() => remove(alert.key)"
     >
@@ -19,7 +19,10 @@ export default {
   computed: {
     ...mapGetters({
       alerts: 'alerts/alerts'
-    })
+    }),
+    getClass: () => (type) => {
+      return `neon neon--border neon--text neon--${type}`;
+    }
   },
   methods: {
     ...mapActions({

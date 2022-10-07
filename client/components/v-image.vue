@@ -1,28 +1,36 @@
 <template>
-  <div class="won-line bg-blur" :class="{'won-line--loading': !fakeColors.length}">
-    <div
-      v-show="!!fakeColors.length"
-      class="won-line__track"
-      ref="track"
-      :class="{transitionClass, transformClass}"
-    >
+  <div class="won-line-frame neon neon--pink neon--border">
+    <div class="won-line" :class="{'won-line--loading': !fakeColors.length}">
       <div
-        v-for="(c, i) in fakeColors"
-        :key="c + i"
-        class="won-line__item"
-        :class="c + ' ' + i"
-      />
-    </div>
-    <div v-show="!fakeColors.length" class="won-line__placeholder">
-      <div class="won-line-loader">
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
+        v-show="!!fakeColors.length"
+        class="won-line__track"
+        ref="track"
+        :class="{transitionClass, transformClass}"
+      >
+        <div
+          v-for="(c, i) in fakeColors"
+          :key="c + i"
+          class="won-line__item neon neon--border"
+          :class="getClass(c, i)"
+        >
+          <div class="neon neon--border" :class="getClass(c, i)">
+            <div class="neon neon--border" :class="getClass(c, i)">
+              <div class="neon neon--border" :class="getClass(c, i)" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-show="!fakeColors.length" class="won-line__placeholder">
+        <div class="won-line-loader">
+          <div />
+          <div />
+          <div />
+          <div />
+          <div />
+          <div />
+          <div />
+          <div />
+        </div>
       </div>
     </div>
   </div>
@@ -37,7 +45,11 @@ export default {
       transitionClass: 'spinner/transitionClass',
       transformClass: 'spinner/transformClass',
       fakeColors: 'spinner/colorsArray'
-    })
+    }),
+    getClass: () => (color, i) => {
+      if (color === 'orange') return `neon--yellow ${i}`;
+      return `neon--${color} ${i}`;
+    }
   },
   data: () => ({}),
   mounted() {
@@ -55,7 +67,8 @@ export default {
 $boxCount: 39
 $boxWidth: 70px
 $boxHeight: 128px
-$paddingWidth: 5px
+$paddingWidth: 20px
+$paddingHalf: $paddingWidth / 2
 $boxesInview: 7
 
 $boxesInviewLess: $boxesInview - 1 //const
@@ -66,15 +79,19 @@ $visibleWidth: $boxWidth * $boxesInview + $paddingWidth * $boxesInviewLess //con
 $width: -($sum - $visibleWidth) //const -2400px
 $viewWidth: $boxWidth * $boxesInview + $boxesInviewMore * $paddingWidth //const 530px
 
+
+.won-line-frame
+  border-radius: 3rem
+
 .won-line
   max-width: $viewWidth
   overflow: hidden
   position: relative
   padding: $paddingWidth
-  border-radius: 29px
   box-sizing: border-box
   min-height: calc($boxHeight + $paddingWidth * 2)
   height: calc($boxHeight + $paddingWidth * 2)
+  border-radius: 3rem
   &--loading
     &::after
       display: none
@@ -100,15 +117,22 @@ $viewWidth: $boxWidth * $boxesInview + $boxesInviewMore * $paddingWidth //const 
   &__item
     min-height: $boxHeight
     min-width: $boxWidth
-    border-radius: 26px
-    &.gray
-      background-color: var(--gray)
-    &.orange
-      background-color: var(--orange)
-    &.red
-      background-color: var(--red)
-    &.green
-      background-color: var(--green)
+    border-radius: 36px
+    @apply flex items-center justify-center
+    & > div
+      height: 80%
+      width: 75%
+      border-radius: 25px
+      @apply flex items-center justify-center
+      & > div
+        height: 80%
+        width: 75%
+        border-radius: 17px
+        @apply flex items-center justify-center
+        & > div
+          height: 75%
+          width: 63%
+          border-radius: 11px
 
 .transitionClass
   transition: transform 5s ease 0s

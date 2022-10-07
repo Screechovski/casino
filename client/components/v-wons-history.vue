@@ -1,11 +1,11 @@
 <template>
   <div class="wons-history" :class="cssClass">
-    <ul class="wons-history__list bg-blur">
+    <ul class="wons-history__list">
       <li
         v-for="(item, i) in items"
         :key="i"
         class="wons-history__item"
-        :class="item"
+        :class="getClass(item)"
       ></li>
     </ul>
   </div>
@@ -26,7 +26,11 @@ export default {
   computed: {
     ...mapGetters({
       items: 'wonsHistory'
-    })
+    }),
+    getClass: () => (type) => {
+      if (type === 'orange') return `neon neon--border neon--yellow ${type}`;
+      return `neon neon--border neon--${type} ${type}`;
+    }
   },
   methods: {
     ...mapActions({
@@ -38,9 +42,8 @@ export default {
 
 <style lang="sass">
 .wons-history
-  display: flex
-  flex-direction: column
   gap: 10px
+  @apply flex flex-col my-2
   &__label
     color: #ffffff
     font-size: 25px
@@ -48,24 +51,21 @@ export default {
     display: flex
     align-items: center
     flex-direction: row-reverse
-    gap: 5px
+    gap: 8px
     height: 30px
     padding: 5px
     border-radius: 0.55em
   &__item
-    width: 10px
+    width: 16px
     height: 0
-    border-radius: 4px
+    border-radius: 8px
+    --borderWidth: 1px !important
     &.red
-      background-color: var(--red)
       height: 20px
     &.gray
-      background-color: var(--gray)
       height: 30px
     &.green
-      background-color: var(--green)
-      height: 15px
+      height: 16px
     &.orange
-      background-color: var(--orange)
-      height: 25px
+      height: 26px
 </style>

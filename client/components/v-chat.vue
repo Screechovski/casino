@@ -1,6 +1,6 @@
 <template>
   <div
-    class="chat bg-blur"
+    class="chat neon neon--border"
     :class="{[cssClass]: cssClass}"
     ref="chat"
     :style="`
@@ -12,14 +12,14 @@
   >
     <div class="chat__header">
       <button
-        class="chat__arrow-down bg-blur bg-blur--hover"
+        class="chat__arrow-down neon neon--icon neon--border neon--hover"
         :class="{active: !isOpen}"
         @click="toggleOpened"
       >
         <s-arrow-down />
       </button>
       <button
-        class="chat__transfer bg-blur bg-blur--hover"
+        class="chat__transfer neon neon--icon neon--border neon--hover"
         @mousedown="moveMousedownHandler"
       >
         <s-move />
@@ -40,13 +40,13 @@
     <form class="chat__form" v-if="isOpen" @submit.prevent="send">
       <input
         type="text"
-        class="my-input chat__input"
+        class="neon neon--border neon--text neon--blue chat__input"
         @input="inputHandler"
         :value="message"
       />
       <button
         type="button"
-        class="chat__send my-button"
+        class="chat__send neon neon--border neon--text neon--pink neon--hover"
         :disabled="!canSend"
         :value="message"
         @click="send"
@@ -110,9 +110,9 @@ export default {
     },
     messageClass: (state) => (ownerId) => {
       if (state.userId === ownerId) {
-        return 'me';
+        return 'me neon neon--text neon--border neon--yellow';
       }
-      return 'bg-blur';
+      return 'neon neon--text neon--border';
     }
   },
   methods: {
@@ -182,36 +182,23 @@ export default {
 </script>
 
 <style lang="sass">
-
 .chat
-  display: flex
-  flex-direction: column
-  gap: 8px
   width: 300px
-  padding: 3px
-  border-radius: 8px
+  @apply rounded-xl flex flex-col gap-2 p-2
   &__header
     display: flex
     gap: 5px
   &__transfer,
   &__arrow-down
-    height: 30px
-    padding: 0
-    border-radius: 5px
-    border: none
-    background-color: var(--bg-light)
-    display: flex
-    align-items: center
-    justify-content: center
     width: calc(50% - 2.5px)
     cursor: move
+    @apply flex h-8 rounded-xl p-0 flex items-center justify-center
     .svg
       height: 20px
       width: 20px
       svg
         height: 100%
         width: 100%
-        fill: var(--bg-dark)
   &__arrow-down
     cursor: pointer
     &.active
@@ -221,8 +208,9 @@ export default {
     display: flex
     flex-direction: column
     gap: 5px
-    max-height: 400px
-    overflow: auto
+    max-height: 300px
+    overflow-x: auto
+    overflow-y: visible
     &::-webkit-scrollbar
       width: 6px
     &::-webkit-scrollbar-track
@@ -234,9 +222,8 @@ export default {
   &__message
     padding: 3px 5px
     max-width: 80%
-    border-radius: 5px
     line-height: 1.3em
-    display: grid
+    @apply grid gap-1 rounded-xl
     .name
       font-size: 13px
       grid-area: name
@@ -254,7 +241,6 @@ export default {
       grid-template-rows: auto 1fr
       grid-template-areas: "name date" "message message"
     &.me
-      background-color: #fff
       margin-left: auto
       grid-template-columns: 1fr
       grid-template-rows: 1fr auto
@@ -262,24 +248,16 @@ export default {
       .name
         display: none
   &__input
-    border: 1px solid var(--bg-light)
     padding: 0.4em 0.8em
-    border-radius: 0.55em
     outline: none
     width: calc(100% - 115px)
+    @apply rounded-xl
   &__send
     width: 110px
-    padding: 0px
-    display: flex
-    align-items: center
-    justify-content: center
-    cursor: pointer
+    padding: 0
+    @apply rounded-xl flex items-center justify-center
     &:disabled
       cursor: not-allowed
-      &:active
-        background-color: #363636
-    &:active
-      background-color: #242424
   &__form
     display: flex
     gap: 5px

@@ -1,7 +1,7 @@
 const path = require('path');
 const {VueLoaderPlugin} = require('vue-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {isProd} = require('../config');
+const {isProd} = require('./config');
 
 module.exports = {
   entry: './client/main.js',
@@ -17,6 +17,7 @@ module.exports = {
         use: [
           'vue-style-loader',
           'css-loader',
+          'postcss-loader',
           {
             loader: 'sass-loader',
             options: {
@@ -59,7 +60,7 @@ module.exports = {
   ],
   output: {
     filename: '[name].[contenthash].js',
-    path: path.resolve(__dirname, '../public'),
+    path: path.resolve(__dirname, './public'),
     publicPath: isProd ? '/casino/' : '/'
   },
   watch: !isProd
