@@ -26,3 +26,5 @@ database-users.json
 *.sw?
 
 package-lock.json
+
+public
